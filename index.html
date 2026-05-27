@@ -232,6 +232,38 @@
             background: rgba(99, 102, 241, 0.5);
             border-radius: 3px;
         }
+
+        /* --- EXTENSIÓN VERTICAL EN DISPOSITIVOS MÓVILES --- */
+        .game-screen {
+            display: none;
+        }
+        .game-screen.active {
+            display: flex !important;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        /* --- NUEVOS ESTILOS PARA CÓDIGO QR ULTRA NÍTIDO --- */
+        #qrCodeContainer {
+            background-color: #ffffff !important;
+            padding: 10px !important;
+            border-radius: 12px !important;
+            display: inline-block !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+        }
+        #qrCodeContainer img, #qrCodeContainer canvas {
+            display: block !important;
+            margin: 0 auto !important;
+            width: 130px !important;
+            height: 130px !important;
+            image-rendering: -moz-crisp-edges !important;
+            image-rendering: -o-crisp-edges !important;
+            image-rendering: -webkit-optimize-contrast !important;
+            image-rendering: crisp-edges !important;
+            image-rendering: pixelated !important;
+        }
     </style>
     
     <!-- Script MathJax -->
@@ -240,7 +272,7 @@
         window.MathJax = { tex: { inlineMath: [['$', '$']] } };
     </script>
 </head>
-<body class="min-h-screen text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white p-4 sm:p-6 relative">
+<body class="min-h-screen text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white p-2.5 sm:p-6 relative">
 
     <!-- LUCES DE FONDO -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -248,434 +280,433 @@
     </div>
 
     <!-- CABECERA -->
-    <header class="max-w-5xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 bg-slate-950/70 backdrop-blur-md border border-slate-900 rounded-2xl p-4 shadow-2xl z-10 relative">
+    <header class="max-w-5xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 mb-2 sm:mb-4 bg-slate-950/70 backdrop-blur-md border border-slate-900 rounded-2xl p-3.5 sm:p-4 shadow-2xl z-10 relative">
         <div class="flex items-center gap-3">
-            <div class="bg-indigo-600/20 p-2.5 rounded-xl border border-indigo-500/30">
-                <i data-lucide="brain-circuit" class="w-8 h-8 text-indigo-450 animate-pulse"></i>
+            <div class="bg-indigo-600/20 p-2 rounded-xl border border-indigo-500/30">
+                <i data-lucide="brain-circuit" class="w-7 h-7 sm:w-8 sm:h-8 text-indigo-440 animate-pulse"></i>
             </div>
             <div>
-                <h1 class="text-2xl font-black tracking-tight text-white">CHALLENGE! <span class="text-xs text-indigo-300">v2.3</span></h1>
-                <p class="text-xs text-slate-400">Desafío de Física Interactivo</p>
+                <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white">CHALLENGE! <span class="text-xs text-indigo-300">v2.4</span></h1>
+                <p class="text-[10px] sm:text-xs text-slate-400">Desafío de Física Interactivo</p>
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <button onclick="toggleMute()" id="soundToggleBtn" class="bg-slate-900 text-indigo-400 p-2.5 rounded-xl border border-slate-800 text-xs font-bold shadow-md cursor-pointer flex items-center gap-2">
-                <i id="soundIcon" data-lucide="volume-2" class="w-5 h-5"></i>
+            <button onclick="toggleMute()" id="soundToggleBtn" class="bg-slate-900 text-indigo-405 p-2 rounded-xl border border-slate-800 text-xs font-bold shadow-md cursor-pointer flex items-center gap-1.5">
+                <i id="soundIcon" data-lucide="volume-2" class="w-4.5 h-4.5"></i>
                 <span id="soundText" class="hidden sm:inline">Sonido Activo</span>
             </button>
-            <button onclick="restartGame()" class="bg-slate-900 text-slate-300 p-2.5 rounded-xl border border-slate-800 text-xs font-bold shadow-md cursor-pointer">
-                <i data-lucide="home" class="w-5 h-5"></i>
+            <button onclick="restartGame()" class="bg-slate-900 text-slate-305 p-2 rounded-xl border border-slate-800 text-xs font-bold shadow-md cursor-pointer">
+                <i data-lucide="home" class="w-4.5 h-4.5"></i>
             </button>
         </div>
     </header>
 
     <!-- CUERPO DEL JUEGO -->
-    <main class="max-w-4xl w-full mx-auto flex-grow flex flex-col justify-center my-4 z-10 relative">
-        <div class="bg-slate-950/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 sm:p-8 relative overflow-hidden card-glow-border">
+    <main class="max-w-4xl w-full mx-auto flex-grow flex flex-col justify-stretch sm:justify-center my-1.5 sm:my-4 z-10 relative">
+        <!-- Tarjeta principal con altura responsiva estirada en móviles -->
+        <div class="bg-slate-950/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 relative overflow-hidden card-glow-border min-h-[82vh] sm:min-h-0 flex flex-col justify-between">
             
             <!-- PANTALLA: BIENVENIDA -->
-            <div id="welcomeScreen" class="game-screen active space-y-6 relative z-20">
-                <div class="text-center space-y-2">
-                    <h2 class="text-3xl font-extrabold text-white">¡Bienvenido al Desafío!</h2>
-                    <p class="text-slate-400 text-sm">Compite en tiempo real o practica en solitario.</p>
+            <div id="welcomeScreen" class="game-screen active space-y-4 sm:space-y-6 relative z-20">
+                <div class="text-center space-y-1">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">¡Bienvenido al Desafío!</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm">Compite en tiempo real o practica en solitario.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                    <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pt-1">
+                    <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 sm:p-6 flex flex-col justify-between space-y-3 sm:space-y-4">
                         <div>
-                            <div class="bg-amber-500/10 text-amber-455 p-2.5 rounded-xl w-fit mb-2">
-                                <i data-lucide="users" class="w-6 h-6"></i>
+                            <div class="bg-amber-500/10 text-amber-455 p-2 rounded-xl w-fit mb-1">
+                                <i data-lucide="users" class="w-5 h-5"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-white">Unirse a una Partida</h3>
-                            <p class="text-xs text-slate-400 mt-1">Introduce el PIN de acceso para competir en tiempo real.</p>
+                            <h3 class="text-base sm:text-lg font-bold text-white">Unirse a una Partida</h3>
+                            <p class="text-[11px] text-slate-405 mt-0.5">Introduce el PIN de acceso para competir en tiempo real.</p>
                         </div>
-                        <button onclick="showJoinScreen()" class="w-full btn-3d-amber text-slate-950 font-extrabold py-3.5 px-4 rounded-xl cursor-pointer">Ingresar PIN</button>
+                        <button onclick="showJoinScreen()" class="w-full btn-3d-amber text-slate-950 font-extrabold py-3 px-4 rounded-xl cursor-pointer text-sm">Ingresar PIN</button>
                     </div>
-                    <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between space-y-4">
+                    <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4 sm:p-6 flex flex-col justify-between space-y-3 sm:space-y-4">
                         <div>
-                            <div class="bg-cyan-500/10 text-cyan-400 p-2.5 rounded-xl w-fit mb-2">
-                                <i data-lucide="folder-plus" class="w-6 h-6"></i>
+                            <div class="bg-cyan-500/10 text-cyan-405 p-2 rounded-xl w-fit mb-1">
+                                <i data-lucide="folder-plus" class="w-5 h-5"></i>
                             </div>
-                            <h3 class="text-lg font-bold text-white">Partidas Personalizadas</h3>
-                            <p class="text-xs text-slate-400 mt-1">Crea, edita o importa tus sets de preguntas preferidos.</p>
+                            <h3 class="text-base sm:text-lg font-bold text-white">Partidas Personalizadas</h3>
+                            <p class="text-[11px] text-slate-405 mt-0.5">Crea, edita o importa tus sets de preguntas preferidos.</p>
                         </div>
-                        <button onclick="showCustomGameSetup()" class="w-full btn-3d-cyan text-white font-extrabold py-3.5 px-4 rounded-xl cursor-pointer">Gestionar Configuración</button>
+                        <button onclick="showCustomGameSetup()" class="w-full btn-3d-cyan text-white font-extrabold py-3 px-4 rounded-xl cursor-pointer text-sm">Gestionar Configuración</button>
                     </div>
                 </div>
 
-                <div class="border-t border-slate-900 pt-6 space-y-6 text-center">
+                <div class="border-t border-slate-900 pt-4 sm:pt-6 space-y-4 text-center">
                     <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
                         <i data-lucide="radio" class="w-4 h-4 text-indigo-400"></i>
                         Crear Partida (Host)
                     </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <button onclick="showHostSetup('work_energy')" class="btn-3d-indigo text-white text-xs font-bold py-3 px-4 rounded-xl">Trabajo y Energía</button>
-                        <button onclick="showHostSetup('newton_laws')" class="btn-3d-indigo text-white text-xs font-bold py-3 px-4 rounded-xl">Leyes de Newton</button>
-                        <button onclick="showHostSetup('kinematics')" class="btn-3d-indigo text-white text-xs font-bold py-3 px-4 rounded-xl">Cinemática</button>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <button onclick="showHostSetup('work_energy')" class="btn-3d-indigo text-white text-xs font-bold py-2.5 px-3 rounded-xl">Trabajo y Energía</button>
+                        <button onclick="showHostSetup('newton_laws')" class="btn-3d-indigo text-white text-xs font-bold py-2.5 px-3 rounded-xl">Leyes de Newton</button>
+                        <button onclick="showHostSetup('kinematics')" class="btn-3d-indigo text-white text-xs font-bold py-2.5 px-3 rounded-xl">Cinemática</button>
                     </div>
                     
-                    <div class="space-y-4 bg-slate-950/45 border border-slate-900 rounded-2xl p-4 sm:p-5 text-left">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <h4 class="text-xs font-black text-slate-455 uppercase tracking-widest flex items-center gap-2">
+                    <div class="space-y-3 bg-slate-950/45 border border-slate-900 rounded-xl p-3.5 sm:p-5 text-left">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <h4 class="text-xs font-black text-slate-455 uppercase tracking-widest flex items-center gap-1.5">
                                 <i data-lucide="user" class="w-4 h-4 text-emerald-455"></i>
                                 Jugar solo (Física)
                             </h4>
                             <div class="flex items-center gap-2">
-                                <label for="spNumQuestions" class="text-xs text-slate-400 font-semibold whitespace-nowrap">N° Preguntas:</label>
-                                <input type="number" id="spNumQuestions" value="10" min="1" max="20" class="w-16 bg-slate-900 border border-slate-800 rounded-lg text-center text-white py-1 text-sm font-bold focus:border-indigo-550 outline-none">
+                                <label for="spNumQuestions" class="text-[11px] text-slate-400 font-semibold whitespace-nowrap">N° Preguntas:</label>
+                                <input type="number" id="spNumQuestions" value="10" min="1" max="20" class="w-14 bg-slate-900 border border-slate-800 rounded-lg text-center text-white py-0.5 text-xs font-bold focus:border-indigo-550 outline-none">
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
-                            <button onclick="startGame('work_energy')" class="btn-3d-emerald text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
-                                <i data-lucide="play" class="w-4 h-4"></i> Trabajo y Energía
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-0.5">
+                            <button onclick="startGame('work_energy')" class="btn-3d-emerald text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i> Trabajo y Energía
                             </button>
-                            <button onclick="startGame('newton_laws')" class="btn-3d-emerald text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
-                                <i data-lucide="play" class="w-4 h-4"></i> Leyes de Newton
+                            <button onclick="startGame('newton_laws')" class="btn-3d-emerald text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i> Leyes de Newton
                             </button>
-                            <button onclick="startGame('kinematics')" class="btn-3d-emerald text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
-                                <i data-lucide="play" class="w-4 h-4"></i> Cinemática
+                            <button onclick="startGame('kinematics')" class="btn-3d-emerald text-white text-xs font-bold py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="play" class="w-3.5 h-3.5"></i> Cinemática
                             </button>
                         </div>
                     </div>
 
-                    <button onclick="showAdminScreen()" class="text-[10px] font-bold text-slate-400 hover:text-indigo-455 py-2 px-5 rounded-full border border-slate-850 cursor-pointer uppercase transition">Administrar Preguntas Base</button>
+                    <button onclick="showAdminScreen()" class="text-[9px] font-bold text-slate-455 hover:text-indigo-455 py-2 px-4 rounded-full border border-slate-850 cursor-pointer uppercase transition">Administrar Preguntas Base</button>
                 </div>
             </div>
 
             <!-- CONFIGURAR PARTIDA (HOST) -->
-            <div id="hostSetupScreen" class="game-screen hidden space-y-6 z-20">
+            <div id="hostSetupScreen" class="game-screen hidden space-y-4 sm:space-y-6 z-20">
                 <h2 class="text-2xl font-extrabold text-white">Configurar Partida</h2>
-                <div class="space-y-4 max-w-md mx-auto text-left">
+                <div class="space-y-4 max-w-md mx-auto text-left flex-grow flex flex-col justify-center">
                     <div class="space-y-1">
                         <label for="hostNameInput" class="text-xs font-semibold text-slate-400">Nombre de Anfitrión:</label>
-                        <input type="text" id="hostNameInput" placeholder="Ej: Prof. Geller" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none focus:border-indigo-500">
+                        <input type="text" id="hostNameInput" placeholder="Ej: Prof. Geller" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3 px-4 outline-none focus:border-indigo-500 text-sm">
                     </div>
                     <div class="space-y-1">
                         <label for="mpNumQuestions" class="text-xs font-semibold text-slate-400">Número de Preguntas (1-20):</label>
-                        <input type="number" id="mpNumQuestions" value="10" min="1" max="20" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none focus:border-indigo-500">
+                        <input type="number" id="mpNumQuestions" value="10" min="1" max="20" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3 px-4 outline-none focus:border-indigo-500 text-sm">
                     </div>
                     <div id="hostSetupMessage" class="text-sm font-bold text-rose-400 text-center min-h-[1.25rem]"></div>
-                    <div class="flex gap-4">
-                        <button id="createGameButton" class="flex-1 btn-3d-indigo text-white font-extrabold py-3.5 rounded-xl">Crear Partida</button>
-                        <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-extrabold py-3.5 px-6 rounded-xl">Volver</button>
+                    <div class="flex gap-4 pt-2">
+                        <button id="createGameButton" class="flex-1 btn-3d-indigo text-white font-extrabold py-3 rounded-xl text-sm">Crear Partida</button>
+                        <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-extrabold py-3 px-6 rounded-xl text-sm">Volver</button>
                     </div>
                 </div>
             </div>
 
             <!-- PARTIDAS PERSONALIZADAS -->
-            <div id="customGameSetupScreen" class="game-screen hidden space-y-6 relative z-20">
-                <div class="flex items-center gap-3 border-b border-slate-900 pb-4 text-left">
+            <div id="customGameSetupScreen" class="game-screen hidden space-y-4 sm:space-y-6 relative z-20">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 text-left">
                     <button onclick="restartGame()" class="text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
-                    <h2 class="text-2xl font-extrabold text-white">Partidas Personalizadas</h2>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-white">Partidas Personalizadas</h2>
                 </div>
 
-                <div id="savedCustomSetsSection" class="bg-slate-900/40 border border-slate-900 rounded-2xl p-5 space-y-4 text-left">
-                    <h3 class="text-base font-bold text-slate-300 flex items-center gap-2">
-                        <i data-lucide="database" class="w-5 h-5 text-indigo-400"></i>
+                <div id="savedCustomSetsSection" class="bg-slate-900/40 border border-slate-900 rounded-xl p-4 space-y-3 text-left flex-grow overflow-y-auto custom-scroll">
+                    <h3 class="text-xs sm:text-sm font-bold text-slate-300 flex items-center gap-2">
+                        <i data-lucide="database" class="w-4 h-4 text-indigo-400"></i>
                         Mis Colecciones Guardadas (Local)
                     </h3>
-                    <ul id="savedCustomSetsListUL" class="space-y-3 max-h-52 overflow-y-auto custom-scroll pr-1"></ul>
-                    <div class="flex justify-end pt-2">
-                        <button onclick="prepareNewCustomSetForm()" class="btn-3d-indigo text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center gap-1.5 cursor-pointer">
-                            <i data-lucide="plus" class="w-4 h-4"></i> Crear Nueva Configuración
+                    <ul id="savedCustomSetsListUL" class="space-y-2.5 max-h-48 overflow-y-auto custom-scroll pr-1"></ul>
+                    <div class="flex justify-end pt-1">
+                        <button onclick="prepareNewCustomSetForm()" class="btn-3d-indigo text-white font-bold py-2 px-3.5 rounded-xl text-[10px] flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Crear Nueva Configuración
                         </button>
                     </div>
                 </div>
 
-                <div id="customGameCreationArea" class="hidden space-y-5 bg-slate-900/20 border border-slate-900 rounded-2xl p-5 text-left">
-                    <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-900 pb-2">
-                        <i data-lucide="edit-3" class="w-5 h-5 text-cyan-400"></i> Diseñador de Preguntas
+                <div id="customGameCreationArea" class="hidden space-y-4 bg-slate-900/20 border border-slate-900 rounded-xl p-4 text-left">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2 border-b border-slate-900 pb-1.5">
+                        <i data-lucide="edit-3" class="w-4.5 h-4.5 text-cyan-400"></i> Diseñador de Preguntas
                     </h3>
 
                     <!-- Carga Masiva CSV -->
-                    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 space-y-3">
-                        <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-2">
-                            <i data-lucide="file-up" class="w-4 h-4 text-indigo-400"></i> Importar desde Excel / CSV (Soporta LaTeX)
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-3 space-y-2">
+                        <h4 class="text-[10px] sm:text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="file-up" class="w-3.5 h-3.5"></i> Importar desde Excel / CSV (Soporta LaTeX)
                         </h4>
-                        <p class="text-[11px] text-slate-400 leading-relaxed">
-                            Carga preguntas de golpe. El archivo debe ser un formato CSV separado por punto y coma (`;`).
-                        </p>
-                        <div class="flex flex-col sm:flex-row items-center gap-3 pt-1">
-                            <label class="btn-3d-indigo text-white text-xs font-bold py-2 px-4 rounded-xl cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto">
-                                <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                        <div class="flex flex-col sm:flex-row items-center gap-2">
+                            <label class="btn-3d-indigo text-white text-[10px] font-bold py-2 px-3 rounded-xl cursor-pointer flex items-center justify-center gap-1.5 w-full sm:w-auto">
+                                <i data-lucide="upload-cloud" class="w-4.5 h-4.5"></i>
                                 <span>Subir Archivo CSV</span>
                                 <input type="file" id="csvFileInputCustom" accept=".csv" class="hidden" onchange="handleCSVUpload(event, 'custom')">
                             </label>
-                            <button onclick="downloadCSVTemplate()" class="btn-3d-slate text-indigo-300 text-xs font-bold py-2 px-4 rounded-xl flex items-center justify-center gap-2 w-full sm:w-auto">
-                                <i data-lucide="download" class="w-4 h-4"></i> Plantilla CSV
+                            <button onclick="downloadCSVTemplate()" class="btn-3d-slate text-indigo-300 text-[10px] font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 w-full sm:w-auto">
+                                <i data-lucide="download" class="w-4.5 h-4.5"></i> Plantilla CSV
                             </button>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <label for="customHostName" class="text-xs font-semibold text-slate-400">Nombre del Anfitrión:</label>
-                            <input type="text" id="customHostName" placeholder="Einstein" class="bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-3 text-sm text-white w-full outline-none focus:border-indigo-550">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="space-y-0.5">
+                            <label for="customHostName" class="text-[10px] font-semibold text-slate-400">Nombre de Host:</label>
+                            <input type="text" id="customHostName" placeholder="Einstein" class="bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-xs text-white w-full outline-none focus:border-indigo-550">
                         </div>
-                        <div class="space-y-1">
-                            <label for="customGameSetName" class="text-xs font-semibold text-slate-400">Nombre de la Colección:</label>
-                            <input type="text" id="customGameSetName" placeholder="Ej: Examen de Física" class="bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-3 text-sm text-white w-full outline-none focus:border-indigo-550">
+                        <div class="space-y-0.5">
+                            <label for="customGameSetName" class="text-[10px] font-semibold text-slate-400">Nombre de la Colección:</label>
+                            <input type="text" id="customGameSetName" placeholder="Ej: Examen de Física" class="bg-slate-900 border border-slate-800 rounded-xl py-2 px-3 text-xs text-white w-full outline-none focus:border-indigo-550">
                         </div>
                     </div>
 
-                    <div id="customQuestionForm" class="bg-slate-950/60 border border-slate-900 rounded-xl p-4 space-y-4">
-                        <div class="space-y-1">
-                            <label class="text-xs font-bold text-indigo-400">Texto de la Pregunta ($LaTeX$ admitido):</label>
-                            <textarea id="customQText" placeholder="Ej: ¿Qué trabajo realiza una fuerza de 10 N?" class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white w-full h-16 outline-none resize-none focus:border-indigo-500"></textarea>
+                    <div id="customQuestionForm" class="bg-slate-950/60 border border-slate-900 rounded-xl p-3 space-y-3.5">
+                        <div class="space-y-0.5">
+                            <label class="text-[10px] font-bold text-indigo-400">Texto de la Pregunta ($LaTeX$):</label>
+                            <textarea id="customQText" placeholder="Ej: ¿Qué trabajo realiza una fuerza de 10 N?" class="bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-white w-full h-12 outline-none resize-none focus:border-indigo-500"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="space-y-0.5">
+                                <label class="text-[10px] font-semibold text-slate-400">Opción A (Correcta por defecto):</label>
+                                <input type="text" id="customOpt0" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white w-full outline-none">
+                            </div>
+                            <div class="space-y-0.5">
+                                <label class="text-[10px] font-semibold text-slate-400">Opción B:</label>
+                                <input type="text" id="customOpt1" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white w-full outline-none">
+                            </div>
+                            <div class="space-y-0.5">
+                                <label class="text-[10px] font-semibold text-slate-400">Opción C:</label>
+                                <input type="text" id="customOpt2" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white w-full outline-none">
+                            </div>
+                            <div class="space-y-0.5">
+                                <label class="text-[10px] font-semibold text-slate-400">Opción D:</label>
+                                <input type="text" id="customOpt3" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white w-full outline-none">
+                            </div>
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div class="space-y-1">
-                                <label class="text-xs font-semibold text-slate-400">Opción A (Correcta por defecto):</label>
-                                <input type="text" id="customOpt0" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-xs font-semibold text-slate-400">Opción B:</label>
-                                <input type="text" id="customOpt1" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-xs font-semibold text-slate-400">Opción C:</label>
-                                <input type="text" id="customOpt2" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
-                            </div>
-                            <div class="space-y-1">
-                                <label class="text-xs font-semibold text-slate-400">Opción D:</label>
-                                <input type="text" id="customOpt3" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1">
-                                <label class="text-xs font-semibold text-slate-400">Respuesta Correcta:</label>
-                                <select id="customCorrectIndex" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
+                            <div class="space-y-0.5">
+                                <label class="text-[10px] font-semibold text-slate-400">Respuesta Correcta:</label>
+                                <select id="customCorrectIndex" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white w-full outline-none">
                                     <option value="0">Opción A</option><option value="1">Opción B</option><option value="2">Opción C</option><option value="3">Opción D</option>
                                 </select>
                             </div>
-                            <div class="space-y-1">
-                                <label class="text-xs font-semibold text-slate-400">Explicación ($LaTeX$ admitido):</label>
-                                <textarea id="customExplanationText" placeholder="Explicación de la respuesta." class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full h-10 resize-none outline-none"></textarea>
+                            <div class="space-y-0.5">
+                                <label class="text-[10px] font-semibold text-slate-400">Explicación ($LaTeX$):</label>
+                                <textarea id="customExplanationText" placeholder="Explicación de la respuesta." class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white w-full h-8 resize-none outline-none"></textarea>
                             </div>
                         </div>
-                        <button onclick="addCustomQuestion()" class="w-full btn-3d-indigo text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2">
+                        <button onclick="addCustomQuestion()" class="w-full btn-3d-indigo text-white font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5">
                             <i data-lucide="plus-circle" class="w-4 h-4"></i> Guardar Pregunta en la Lista
                         </button>
                         <input type="hidden" id="editingCustomQuestionIndex" value="-1">
                     </div>
 
-                    <div class="space-y-2">
-                        <h4 class="text-xs font-bold text-slate-400 uppercase">Preguntas en esta Colección:</h4>
-                        <ul id="customQuestionsList" class="space-y-2 max-h-40 overflow-y-auto custom-scroll pr-1"></ul>
+                    <div class="space-y-1.5">
+                        <h4 class="text-[10px] font-bold text-slate-400 uppercase">Preguntas en esta Colección:</h4>
+                        <ul id="customQuestionsList" class="space-y-2 max-h-32 overflow-y-auto custom-scroll pr-1"></ul>
                     </div>
 
-                    <div id="customGameMessage" class="text-sm font-bold text-center min-h-[1.25rem]"></div>
-                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                        <button id="saveAndCreateCustomGameButton" onclick="saveAndCreateCustomMultiplayerGame()" class="flex-1 btn-3d-cyan text-white font-extrabold py-3.5 px-4 rounded-xl text-sm">Guardar y Abrir Multijugador</button>
-                        <button onclick="saveCustomSetChangesOnly()" class="btn-3d-slate text-white font-extrabold py-3.5 px-4 rounded-xl text-sm">Guardar Cambios Localmente</button>
+                    <div id="customGameMessage" class="text-xs font-bold text-center min-h-[1.25rem]"></div>
+                    <div class="flex flex-col sm:flex-row gap-3 pt-1">
+                        <button id="saveAndCreateCustomGameButton" onclick="saveAndCreateCustomMultiplayerGame()" class="flex-1 btn-3d-cyan text-white font-extrabold py-2.5 px-4 rounded-xl text-xs">Guardar y Abrir Multijugador</button>
+                        <button onclick="saveCustomSetChangesOnly()" class="btn-3d-slate text-white font-extrabold py-2.5 px-4 rounded-xl text-xs">Guardar Cambios Localmente</button>
                     </div>
                 </div>
 
-                <div class="flex justify-center border-t border-slate-900 pt-4">
-                    <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-bold py-2.5 px-6 rounded-xl text-xs">Volver al Inicio</button>
+                <div class="flex justify-center border-t border-slate-900 pt-3">
+                    <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-bold py-2 px-5 rounded-xl text-[10px]">Volver al Inicio</button>
                 </div>
             </div>
 
             <!-- UNIRSE A PARTIDA (PIN) -->
             <div id="joinScreen" class="game-screen hidden space-y-6 relative z-20">
-                <div class="flex items-center gap-3 border-b border-slate-900 pb-4 text-left">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 text-left">
                     <button onclick="restartGame()" class="text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
-                    <h2 class="text-2xl font-extrabold text-white">Unirse a una Partida</h2>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-white">Unirse a una Partida</h2>
                 </div>
-                <div class="space-y-4 max-w-sm mx-auto text-left">
+                <div class="space-y-4 max-w-sm mx-auto text-left flex-grow flex flex-col justify-center">
                     <div class="space-y-1">
-                        <label for="playerNameInput" class="text-sm font-semibold text-slate-350">Tu Nombre:</label>
-                        <input type="text" id="playerNameInput" placeholder="Ej: Newton" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none">
+                        <label for="playerNameInput" class="text-xs font-semibold text-slate-350">Tu Nombre:</label>
+                        <input type="text" id="playerNameInput" placeholder="Ej: Newton" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3 px-4 outline-none text-sm">
                     </div>
                     <div class="space-y-1">
-                        <label for="pinInput" class="text-sm font-semibold text-slate-355">PIN del Lobby:</label>
-                        <input type="text" id="pinInput" placeholder="123456" maxlength="6" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none text-center font-bold tracking-[0.2em] text-lg">
+                        <label for="pinInput" class="text-xs font-semibold text-slate-355">PIN del Lobby:</label>
+                        <input type="text" id="pinInput" placeholder="123456" maxlength="6" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3 px-4 outline-none text-center font-bold tracking-[0.25em] text-lg">
                     </div>
-                    <div id="joinMessage" class="text-sm font-bold text-rose-400 text-center min-h-[1.25rem]"></div>
-                    <div class="flex gap-4">
-                        <button onclick="joinGame()" class="flex-1 btn-3d-amber text-slate-950 font-extrabold py-3.5 rounded-xl">¡Unirme!</button>
-                        <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-extrabold py-3.5 px-6 rounded-xl">Volver</button>
+                    <div id="joinMessage" class="text-xs font-bold text-rose-400 text-center min-h-[1.25rem]"></div>
+                    <div class="flex gap-4 pt-2">
+                        <button onclick="joinGame()" class="flex-1 btn-3d-amber text-slate-950 font-extrabold py-3 rounded-xl text-sm">¡Unirme!</button>
+                        <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-extrabold py-3 px-6 rounded-xl text-sm">Volver</button>
                     </div>
                 </div>
             </div>
 
             <!-- LOBBY DE ESPERA (HOST) -->
-            <div id="lobbyScreen" class="game-screen hidden space-y-6 relative z-20 text-center">
-                <div class="space-y-2">
-                    <div class="bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full text-xs font-bold w-fit mx-auto border border-indigo-500/20">LOBBY DE ESPERA</div>
-                    <h2 class="text-3xl font-black text-white">¡Partida Creada!</h2>
+            <div id="lobbyScreen" class="game-screen hidden space-y-4 sm:space-y-6 relative z-20 text-center">
+                <div class="space-y-1">
+                    <div class="bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full text-[10px] font-bold w-fit mx-auto border border-indigo-500/20">LOBBY DE ESPERA</div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white">¡Partida Creada!</h2>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center bg-slate-900/30 border border-slate-900 p-6 rounded-3xl">
-                    <div class="space-y-3 text-center md:text-left">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-slate-900/30 border border-slate-900 p-4 sm:p-6 rounded-2xl flex-grow overflow-y-auto">
+                    <div class="space-y-2 text-center md:text-left">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">PIN de Acceso</span>
-                        <div id="lobbyPin" class="text-4xl font-black text-indigo-400 tracking-wider bg-slate-950/80 p-4 rounded-2xl border border-slate-900">------</div>
+                        <div id="lobbyPin" class="text-3xl sm:text-4xl font-black text-indigo-400 tracking-wider bg-slate-950/80 p-3 rounded-xl border border-slate-900">------</div>
                     </div>
-                    <div class="flex flex-col items-center justify-center space-y-2 bg-slate-950/60 p-4 rounded-2xl border border-slate-900">
-                        <span class="text-xs text-slate-400 font-bold">Código QR de Escaneo</span>
-                        <div id="qrCodeContainer" class="bg-white p-2 rounded-lg"></div>
+                    <div class="flex flex-col items-center justify-center space-y-1.5 bg-slate-950/60 p-3 rounded-xl border border-slate-900">
+                        <span class="text-[10px] sm:text-xs text-slate-400 font-bold">Código QR de Autounión Rápida</span>
+                        <!-- El contenedor se renderiza con fondo blanco y dimensiones estrictas de lectura -->
+                        <div id="qrCodeContainer"></div>
                     </div>
                 </div>
-                <div class="space-y-3 text-left">
-                    <h4 class="text-sm font-bold text-slate-300 flex justify-between">
+                <div class="space-y-2 text-left max-h-44 overflow-y-auto pr-1">
+                    <h4 class="text-xs font-bold text-slate-300 flex justify-between">
                         <span>Jugadores Unidos:</span>
-                        <span id="playerCountDisplay" class="bg-indigo-600/20 text-indigo-300 px-2 rounded-full text-xs border border-indigo-500/30">0</span>
+                        <span id="playerCountDisplay" class="bg-indigo-600/20 text-indigo-300 px-2 rounded-full text-xs border border-indigo-500/30 font-bold">0</span>
                     </h4>
-                    <ul id="lobbyPlayersList" class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-52 overflow-y-auto custom-scroll p-1"></ul>
+                    <ul id="lobbyPlayersList" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></ul>
                 </div>
-                <div class="flex flex-col sm:flex-row gap-4 border-t border-slate-900 pt-5">
-                    <button id="startMultiplayerGameButton" onclick="startMultiplayerGame()" class="flex-1 btn-3d-emerald text-slate-950 font-extrabold py-3.5 px-6 rounded-xl">Comenzar Partida</button>
-                    <button onclick="cancelGame()" class="btn-3d-rose text-white font-extrabold py-3.5 px-6 rounded-xl">Cancelar Partida</button>
+                <div class="flex flex-col sm:flex-row gap-3 border-t border-slate-900 pt-3">
+                    <button id="startMultiplayerGameButton" onclick="startMultiplayerGame()" class="flex-1 btn-3d-emerald text-slate-950 font-extrabold py-3 px-6 rounded-xl text-sm">Comenzar Partida</button>
+                    <button onclick="cancelGame()" class="btn-3d-rose text-white font-extrabold py-3 px-6 rounded-xl text-sm">Cancelar Partida</button>
                 </div>
             </div>
 
             <!-- ESPERA DEL JUGADOR -->
-            <div id="playerWaitingScreen" class="game-screen hidden space-y-6 text-center py-8 relative z-20">
-                <div class="w-16 h-16 border-4 border-amber-550 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                <div class="space-y-2">
-                    <h2 class="text-2xl font-extrabold text-white">¡Te has unido con éxito!</h2>
-                    <p class="text-slate-400 text-sm max-w-sm mx-auto">Esperando que el anfitrión inicie la partida...</p>
+            <div id="playerWaitingScreen" class="game-screen hidden space-y-6 text-center py-4 relative z-20 flex-grow flex flex-col justify-center">
+                <div class="w-14 h-14 border-4 border-amber-550 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <div class="space-y-1.5">
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-white">¡Te has unido con éxito!</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm max-w-sm mx-auto">Esperando que el anfitrión inicie la partida...</p>
                 </div>
-                <div class="bg-slate-900/40 border border-slate-900 rounded-2xl p-4 max-w-xs mx-auto">
-                    <span class="text-xs text-slate-400 uppercase">PIN de Partida</span>
-                    <div id="waitingForPin" class="text-3xl font-black text-amber-400 tracking-wider">------</div>
+                <div class="bg-slate-900/40 border border-slate-900 rounded-2xl p-4 max-w-xs mx-auto w-full">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">PIN de Partida</span>
+                    <div id="waitingForPin" class="text-2xl sm:text-3xl font-black text-amber-400 tracking-wider">------</div>
                 </div>
             </div>
 
             <!-- ADMINISTRAR PREGUNTAS BASE -->
-            <div id="adminScreen" class="game-screen hidden space-y-6 relative z-20">
-                <div class="flex items-center border-b border-slate-900 pb-4 text-left">
+            <div id="adminScreen" class="game-screen hidden space-y-4 relative z-20">
+                <div class="flex items-center border-b border-slate-900 pb-3 text-left">
                     <button onclick="restartGame()" class="text-slate-400 hover:text-white transition mr-3"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
-                    <h2 class="text-2xl font-extrabold text-white">Administrador de Preguntas Predefinidas</h2>
+                    <h2 class="text-lg sm:text-xl font-extrabold text-white">Administrador de Preguntas Predefinidas</h2>
                 </div>
-                <p id="adminCurrentTopicDisplay" class="text-xs text-slate-400 italic bg-slate-900/60 py-2 px-4 rounded-lg">Selecciona un tema para empezar.</p>
-                <div class="grid grid-cols-3 gap-3">
-                    <button onclick="loadQuestionsForAdmin('work_energy')" class="btn-3d-slate text-white font-bold py-2.5 px-3 rounded-lg text-xs">Trabajo y Energía</button>
-                    <button onclick="loadQuestionsForAdmin('newton_laws')" class="btn-3d-slate text-white font-bold py-2.5 px-3 rounded-lg text-xs">Leyes de Newton</button>
-                    <button onclick="loadQuestionsForAdmin('kinematics')" class="btn-3d-slate text-white font-bold py-2.5 px-3 rounded-lg text-xs">Cinemática</button>
+                <p id="adminCurrentTopicDisplay" class="text-xs text-slate-400 italic bg-slate-900/60 py-1.5 px-3 rounded-lg">Selecciona un tema para empezar.</p>
+                <div class="grid grid-cols-3 gap-2.5">
+                    <button onclick="loadQuestionsForAdmin('work_energy')" class="btn-3d-slate text-white font-bold py-2 px-2.5 rounded-lg text-[10px]">Trabajo y Energía</button>
+                    <button onclick="loadQuestionsForAdmin('newton_laws')" class="btn-3d-slate text-white font-bold py-2 px-2.5 rounded-lg text-[10px]">Leyes de Newton</button>
+                    <button onclick="loadQuestionsForAdmin('kinematics')" class="btn-3d-slate text-white font-bold py-2 px-2.5 rounded-lg text-[10px]">Cinemática</button>
                 </div>
 
                 <!-- Carga masiva en Admin -->
-                <div id="adminCSVUploadArea" class="hidden bg-slate-900/40 border border-slate-900 rounded-2xl p-5 text-left space-y-3">
-                    <h3 class="text-xs font-bold text-indigo-300 uppercase flex items-center gap-2">
-                        <i data-lucide="file-up" class="w-4 h-4"></i> Importación Masiva (Tema Actual)
+                <div id="adminCSVUploadArea" class="hidden bg-slate-900/40 border border-slate-900 rounded-xl p-3.5 text-left space-y-2">
+                    <h3 class="text-[10px] font-bold text-indigo-300 uppercase flex items-center gap-1.5">
+                        <i data-lucide="file-up" class="w-3.5 h-3.5"></i> Importación Masiva (Tema Actual)
                     </h3>
-                    <div class="flex flex-col sm:flex-row items-center gap-3">
-                        <label class="btn-3d-indigo text-white text-xs font-bold py-2 px-4 rounded-xl cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto">
+                    <div class="flex flex-col sm:flex-row items-center gap-2">
+                        <label class="btn-3d-indigo text-white text-[10px] font-bold py-1.5 px-3 rounded-xl cursor-pointer flex items-center justify-center gap-1.5 w-full sm:w-auto">
                             <i data-lucide="upload-cloud" class="w-4 h-4"></i> Subir CSV
                             <input type="file" id="csvFileInputAdmin" accept=".csv" class="hidden" onchange="handleCSVUpload(event, 'admin')">
                         </label>
-                        <button onclick="downloadCSVTemplate()" class="btn-3d-slate text-indigo-300 text-xs font-bold py-2 px-4 rounded-xl flex items-center justify-center gap-2 w-full sm:w-auto">
+                        <button onclick="downloadCSVTemplate()" class="btn-3d-slate text-indigo-300 text-[10px] font-bold py-1.5 px-3 rounded-xl flex items-center justify-center gap-1.5 w-full sm:w-auto">
                             <i data-lucide="download" class="w-4 h-4"></i> Plantilla CSV
                         </button>
                     </div>
                 </div>
 
                 <!-- Formulario Admin -->
-                <div id="adminFormSection" class="hidden space-y-4 bg-slate-900/40 border border-slate-900 rounded-2xl p-5 text-left">
-                    <h3 class="text-sm font-bold text-indigo-300">Añadir/Editar Pregunta</h3>
-                    <div class="space-y-1">
-                        <label for="qText" class="text-xs text-slate-400">Pregunta:</label>
-                        <textarea id="qText" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-sm text-white focus:border-indigo-500 outline-none resize-none h-12"></textarea>
+                <div id="adminFormSection" class="hidden space-y-3 bg-slate-900/40 border border-slate-900 rounded-xl p-4 text-left overflow-y-auto">
+                    <h3 class="text-xs font-bold text-indigo-300">Añadir/Editar Pregunta</h3>
+                    <div class="space-y-0.5">
+                        <label for="qText" class="text-[10px] text-slate-400">Pregunta:</label>
+                        <textarea id="qText" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2 text-xs text-white focus:border-indigo-500 outline-none resize-none h-10"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><label for="opt0" class="text-[10px] text-slate-400">Opción A:</label><input type="text" id="opt0" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-xs text-white"></div>
+                        <div><label for="opt1" class="text-[10px] text-slate-400">Opción B:</label><input type="text" id="opt1" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-xs text-white"></div>
+                        <div><label for="opt2" class="text-[10px] text-slate-400">Opción C:</label><input type="text" id="opt2" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-xs text-white"></div>
+                        <div><label for="opt3" class="text-[10px] text-slate-400">Opción D:</label><input type="text" id="opt3" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-xs text-white"></div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
-                        <div><label for="opt0" class="text-xs text-slate-400">Opción A:</label><input type="text" id="opt0" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white"></div>
-                        <div><label for="opt1" class="text-xs text-slate-400">Opción B:</label><input type="text" id="opt1" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white"></div>
-                        <div><label for="opt2" class="text-xs text-slate-400">Opción C:</label><input type="text" id="opt2" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white"></div>
-                        <div><label for="opt3" class="text-xs text-slate-400">Opción D:</label><input type="text" id="opt3" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white"></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <label for="correctIndexAdmin" class="text-xs text-slate-400">Respuesta Correcta:</label>
-                            <select id="correctIndexAdmin" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-white w-full outline-none">
+                        <div class="space-y-0.5">
+                            <label for="correctIndexAdmin" class="text-[10px] text-slate-400">Respuesta Correcta:</label>
+                            <select id="correctIndexAdmin" class="bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-xs text-white w-full outline-none">
                                 <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
                             </select>
                         </div>
-                        <div class="space-y-1">
-                            <label for="explanationTextAdmin" class="text-xs text-slate-400">Explicación:</label>
-                            <textarea id="explanationTextAdmin" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-white h-10 resize-none outline-none"></textarea>
+                        <div class="space-y-0.5">
+                            <label for="explanationTextAdmin" class="text-[10px] text-slate-400">Explicación:</label>
+                            <textarea id="explanationTextAdmin" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-xs text-white h-8 resize-none outline-none"></textarea>
                         </div>
                     </div>
-                    <div class="flex gap-3">
-                        <button onclick="addOrUpdateQuestion()" class="flex-1 btn-3d-indigo text-white font-bold py-2.5 px-4 rounded-xl text-xs">Guardar Pregunta</button>
-                        <button onclick="clearAdminQuestionForm()" class="btn-3d-slate text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs">Limpiar</button>
+                    <div class="flex gap-2 pt-1">
+                        <button onclick="addOrUpdateQuestion()" class="flex-1 btn-3d-indigo text-white font-bold py-2 px-3 rounded-xl text-xs">Guardar Pregunta</button>
+                        <button onclick="clearAdminQuestionForm()" class="btn-3d-slate text-slate-300 font-bold py-2 px-3 rounded-xl text-xs">Limpiar</button>
                     </div>
                 </div>
 
-                <div id="adminListSection" class="hidden space-y-3 text-left">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase">Preguntas del Tema:</h3>
-                    <ul id="questionsList" class="space-y-2 max-h-48 overflow-y-auto custom-scroll pr-1"></ul>
-                    <button onclick="saveCurrentQuestions()" class="w-full btn-3d-emerald text-slate-950 font-extrabold py-2.5 px-4 rounded-xl text-xs">Guardar Cambios en Tema</button>
+                <div id="adminListSection" class="hidden space-y-2 text-left max-h-44 overflow-y-auto pr-1">
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase">Preguntas del Tema:</h3>
+                    <ul id="questionsList" class="space-y-2"></ul>
+                    <button onclick="saveCurrentQuestions()" class="w-full btn-3d-emerald text-slate-950 font-extrabold py-2.5 px-3 rounded-xl text-xs">Guardar Cambios en Tema</button>
                 </div>
                 <div id="adminMessage" class="text-xs font-bold text-center text-emerald-450 min-h-[1.25rem]"></div>
-                <div class="flex justify-center border-t border-slate-900 pt-4">
-                    <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-bold py-2.5 px-6 rounded-xl text-xs">Volver al Inicio</button>
+                <div class="flex justify-center border-t border-slate-900 pt-3">
+                    <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-bold py-2 px-5 rounded-xl text-[10px]">Volver al Inicio</button>
                 </div>
             </div>
 
             <!-- JUEGO PRINCIPAL (PREGUNTAS) -->
-            <div id="questionScreen" class="game-screen hidden space-y-6 relative z-20">
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/40 border border-slate-900 p-4 rounded-2xl">
-                    <div class="w-full sm:flex-1 flex items-center gap-3">
-                        <i data-lucide="timer" class="w-5 h-5 text-indigo-400 animate-pulse"></i>
-                        <div class="flex-1 bg-slate-950 h-5 rounded-full overflow-hidden border border-slate-900 p-0.5 shadow-inner">
-                            <div id="timerProgress" class="h-full rounded-full transition-all duration-1000 ease-linear flex items-center justify-center text-[10px] font-black text-white bg-indigo-600" style="width: 100%;">15s</div>
+            <div id="questionScreen" class="game-screen hidden space-y-4 relative z-20 flex-grow flex flex-col justify-between">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/40 border border-slate-900 p-3 rounded-2xl">
+                    <div class="w-full sm:flex-1 flex items-center gap-2.5">
+                        <i data-lucide="timer" class="w-4.5 h-4.5 text-indigo-400 animate-pulse"></i>
+                        <div class="flex-1 bg-slate-950 h-4 rounded-full overflow-hidden border border-slate-900 p-0.5 shadow-inner">
+                            <div id="timerProgress" class="h-full rounded-full transition-all duration-1000 ease-linear flex items-center justify-center text-[9px] font-black text-white bg-indigo-600" style="width: 100%;">15s</div>
                         </div>
                     </div>
-                    <div id="currentScoreDisplay" class="text-indigo-455 font-bold text-sm bg-indigo-500/10 px-4 py-1.5 rounded-xl border border-indigo-500/20 shadow-inner flex items-center gap-2 whitespace-nowrap">
-                        <i data-lucide="award" class="w-4 h-4"></i>
+                    <div id="currentScoreDisplay" class="text-indigo-455 font-bold text-xs bg-indigo-500/10 px-3.5 py-1 rounded-xl border border-indigo-500/20 shadow-inner flex items-center gap-1.5 whitespace-nowrap">
+                        <i data-lucide="award" class="w-3.5 h-3.5"></i>
                         <span>Puntuación: 0</span>
                     </div>
                 </div>
 
-                <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center shadow-lg relative min-h-[140px] flex items-center justify-center">
-                    <div id="questionText" class="text-lg sm:text-xl font-bold text-white math-container tracking-wide leading-relaxed">Cargando...</div>
+                <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-4 sm:p-6 text-center shadow-lg relative flex-grow flex items-center justify-center min-h-[90px] max-h-[220px]">
+                    <div id="questionText" class="text-sm sm:text-lg font-bold text-white math-container tracking-wide leading-relaxed">Cargando...</div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-3" id="optionsContainer">
-                    <button class="answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
-                    <button class="answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
-                    <button class="answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
-                    <button class="answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1.5 flex-grow" id="optionsContainer">
+                    <button class="answer-button min-h-[50px] text-xs sm:text-base font-semibold py-3 px-4 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[50px] text-xs sm:text-base font-semibold py-3 px-4 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[50px] text-xs sm:text-base font-semibold py-3 px-4 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[50px] text-xs sm:text-base font-semibold py-3 px-4 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
                 </div>
 
-                <div id="feedback" class="text-center font-black text-lg transition-all duration-300 min-h-[28px]"></div>
+                <div id="feedback" class="text-center font-black text-sm transition-all duration-300 min-h-[20px]"></div>
 
-                <div id="explanationContainer" class="hidden bg-slate-900/30 border border-slate-900 rounded-2xl p-5 space-y-2 text-left">
-                    <h5 class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
-                        <i data-lucide="lightbulb" class="w-4.5 h-4.5 animate-bounce"></i> Explicación Científica
+                <div id="explanationContainer" class="hidden bg-slate-900/30 border border-slate-900 rounded-2xl p-4 space-y-1.5 text-left max-h-36 overflow-y-auto custom-scroll">
+                    <h5 class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1">
+                        <i data-lucide="lightbulb" class="w-3.5 h-3.5 animate-bounce"></i> Explicación Científica
                     </h5>
-                    <p id="explanation" class="text-xs sm:text-sm text-slate-300 math-container leading-relaxed text-justify"></p>
+                    <p id="explanation" class="text-xs text-slate-300 math-container leading-relaxed text-justify"></p>
                 </div>
 
-                <div class="flex items-center justify-between border-t border-slate-900 pt-4">
-                    <p id="progressText" class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pregunta -- de --</p>
-                    <button id="endGameButton" onclick="endGame()" class="btn-3d-rose text-white font-bold py-2 px-4 rounded-xl text-xs">Finalizar Partida</button>
+                <div class="flex items-center justify-between border-t border-slate-900 pt-3">
+                    <p id="progressText" class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Pregunta -- de --</p>
+                    <button id="endGameButton" onclick="endGame()" class="btn-3d-rose text-white font-bold py-1.5 px-3 rounded-xl text-[10px]">Finalizar Partida</button>
                 </div>
             </div>
 
             <!-- RESULTADOS -->
-            <div id="resultsScreen" class="game-screen hidden space-y-6 relative z-20 text-center">
-                <div class="space-y-2">
-                    <div class="bg-indigo-500/10 text-indigo-400 p-3 rounded-full border border-indigo-500/20 w-fit mx-auto mb-2">
-                        <i data-lucide="trophy" class="w-10 h-10 animate-bounce"></i>
+            <div id="resultsScreen" class="game-screen hidden space-y-6 relative z-20 text-center flex-grow flex flex-col justify-center">
+                <div class="space-y-1.5">
+                    <div class="bg-indigo-500/10 text-indigo-400 p-2.5 rounded-full border border-indigo-500/20 w-fit mx-auto mb-1">
+                        <i data-lucide="trophy" class="w-8 h-8 animate-bounce"></i>
                     </div>
-                    <h2 class="text-3xl font-black text-white">¡Juego Completado!</h2>
-                    <p class="text-slate-400 text-sm">Has finalizado el desafío científico.</p>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white">¡Juego Completado!</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm">Has finalizado el desafío científico.</p>
                 </div>
-                <div id="singlePlayerResults" class="hidden max-w-sm mx-auto bg-slate-900/40 border border-slate-900 rounded-2xl p-6 text-center space-y-3">
-                    <span class="text-xs text-slate-400 uppercase">Puntuación Final</span>
-                    <div id="finalScore" class="text-5xl font-black text-indigo-455 font-mono">0</div>
+                <div id="singlePlayerResults" class="hidden max-w-sm mx-auto bg-slate-900/40 border border-slate-900 rounded-2xl p-5 text-center space-y-2 w-full">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Puntuación Final</span>
+                    <div id="finalScore" class="text-4xl sm:text-5xl font-black text-indigo-455 font-mono">0</div>
                 </div>
-                <div id="multiplayerResults" class="hidden space-y-6">
-                    <div class="bg-slate-900/30 border border-slate-900 rounded-3xl p-6 space-y-4">
-                        <h4 class="text-base font-bold text-slate-300 flex items-center justify-center gap-2">
-                            <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Ranking Final
+                <div id="multiplayerResults" class="hidden space-y-4 w-full flex-grow overflow-y-auto max-h-60 pr-1">
+                    <div class="bg-slate-900/30 border border-slate-900 rounded-2xl p-4 space-y-3">
+                        <h4 class="text-xs font-bold text-slate-300 flex items-center justify-center gap-1.5">
+                            <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Ranking Final
                         </h4>
-                        <ul id="leaderboard" class="space-y-3 max-w-lg mx-auto text-left"></ul>
+                        <ul id="leaderboard" class="space-y-2 max-w-lg mx-auto text-left"></ul>
                     </div>
                 </div>
                 <div class="flex justify-center pt-2">
-                    <button onclick="restartGame()" class="btn-3d-indigo text-white font-extrabold py-3.5 px-10 rounded-2xl text-sm">Volver al Inicio</button>
+                    <button onclick="restartGame()" class="btn-3d-indigo text-white font-extrabold py-3 px-8 rounded-2xl text-xs">Volver al Inicio</button>
                 </div>
             </div>
 
@@ -683,8 +714,8 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="max-w-5xl w-full mx-auto text-center py-4 border-t border-slate-900/60 z-10 relative">
-        <p class="text-[10px] text-slate-500 tracking-wider">Desarrollado con fines educativos • Física Challenge v2.3</p>
+    <footer class="max-w-5xl w-full mx-auto text-center py-2 border-t border-slate-900/60 z-10 relative">
+        <p class="text-[9px] text-slate-500 tracking-wider">Desarrollado con fines educativos • Física Challenge v2.4</p>
     </footer>
 
     <!-- MODAL DE DIÁLOGO PERSONALIZADO -->
@@ -780,7 +811,10 @@
 
         function showScreen(id) { 
             allScreens.forEach(s => s.classList.add('hidden')); 
-            document.getElementById(id).classList.remove('hidden'); 
+            allScreens.forEach(s => s.classList.remove('active'));
+            const activeScreen = document.getElementById(id);
+            activeScreen.classList.remove('hidden');
+            activeScreen.classList.add('active');
         }
 
         function resetGameState() {
@@ -1019,7 +1053,7 @@
                 btn.innerHTML = q.options[i]; 
                 btn.onclick = () => handleSinglePlayerAnswer(i);
                 btn.disabled = false; 
-                btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 btn-3d-option rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full";
+                btn.className = "answer-button min-h-[50px] text-xs sm:text-base font-semibold py-3 px-4 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option";
             });
             
             MathJax.typesetPromise();
@@ -1049,11 +1083,11 @@
             const buttons = document.querySelectorAll('.answer-button');
             buttons.forEach((btn, i) => { 
                 if (i === q.correctAnswerIndex) {
-                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-bold py-4 px-6 btn-3d-correct rounded-2xl flex items-center justify-center text-center math-container w-full";
+                    btn.className = "answer-button min-h-[50px] text-xs sm:text-base font-bold py-3 px-4 btn-3d-correct rounded-xl flex items-center justify-center text-center math-container w-full";
                 } else if (selectedIndex === i) {
-                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-bold py-4 px-6 btn-3d-incorrect rounded-2xl flex items-center justify-center text-center math-container w-full";
+                    btn.className = "answer-button min-h-[50px] text-xs sm:text-base font-bold py-3 px-4 btn-3d-incorrect rounded-xl flex items-center justify-center text-center math-container w-full";
                 } else {
-                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 btn-3d-disabled-neutral rounded-2xl flex items-center justify-center text-center math-container w-full";
+                    btn.className = "answer-button min-h-[50px] text-xs sm:text-base font-semibold py-3 px-4 btn-3d-disabled-neutral rounded-xl flex items-center justify-center text-center math-container w-full";
                 }
             });
 
@@ -1169,7 +1203,7 @@
                 li.innerHTML = `
                     <span class="truncate font-semibold flex-1">${i+1}. ${q.question}</span> 
                     <div class="flex items-center gap-1.5 shrink-0">
-                        <button class="bg-indigo-600 hover:bg-indigo-500 p-2 rounded-lg transition" onclick="editIndividualCustomQuestion(${i})">
+                        <button class="bg-indigo-600 hover:bg-indigo-550 p-2 rounded-lg transition" onclick="editIndividualCustomQuestion(${i})">
                             <i data-lucide="edit" class="w-3.5 h-3.5 text-white"></i>
                         </button>
                         <button class="bg-rose-600 hover:bg-rose-550 p-2 rounded-lg transition" onclick="deleteIndividualCustomQuestion(${i})">
@@ -1217,21 +1251,21 @@
             const listElement = document.getElementById('savedCustomSetsListUL');
             listElement.innerHTML = '';
             if (savedCustomGameSets.length === 0) {
-                listElement.innerHTML = '<li class="text-xs text-slate-400 italic text-center py-4">No tienes colecciones personalizadas guardadas localmente.</li>';
+                listElement.innerHTML = '<li class="text-xs text-slate-405 italic py-4 text-center">No tienes colecciones personalizadas guardadas.</li>';
                 return;
             }
             savedCustomGameSets.forEach((set, index) => {
                 const li = document.createElement('li');
-                li.className = "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-slate-900/60 border border-slate-900 rounded-xl transition";
+                li.className = "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-slate-900/60 border border-slate-900 rounded-xl transition w-full";
                 li.innerHTML = `
                     <div class="flex-1 min-w-0">
                         <span class="block font-bold text-sm text-white truncate">${set.name}</span>
                         <span class="text-[10px] text-slate-450 block">${set.questions.length} preguntas de física</span>
                     </div>
                     <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
-                        <button class="bg-emerald-655 hover:bg-emerald-600 border border-emerald-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition" onclick="useSavedCustomSet(${index})">Usar</button>
-                        <button class="bg-indigo-655 hover:bg-indigo-600 border border-indigo-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition" onclick="editSavedCustomSet(${index})">Editar</button>
-                        <button class="bg-rose-655 hover:bg-rose-600 border border-rose-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition" onclick="deleteSavedCustomSet(${index})">Eliminar</button>
+                        <button class="bg-emerald-655 hover:bg-emerald-600 border border-emerald-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition cursor-pointer" onclick="useSavedCustomSet(${index})">Usar</button>
+                        <button class="bg-indigo-655 hover:bg-indigo-600 border border-indigo-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition cursor-pointer" onclick="editSavedCustomSet(${index})">Editar</button>
+                        <button class="bg-rose-655 hover:bg-rose-600 border border-rose-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition cursor-pointer" onclick="deleteSavedCustomSet(${index})">Eliminar</button>
                     </div>
                 `;
                 listElement.appendChild(li);
@@ -1366,7 +1400,24 @@
             document.getElementById('lobbyPin').textContent = pin;
             const qrContainer = document.getElementById('qrCodeContainer');
             qrContainer.innerHTML = '';
-            new QRCode(qrContainer, { text: pin, width: 110, height: 110 });
+            
+            // --- CÓDIGO QR INTELIGENTE ULTRA COMPATIBLE ---
+            // Usamos split('?')[0].split('#')[0] en window.location.href para obtener la URL base
+            // limpia, evitando que se hereden orígenes "null" o duplicaciones de parámetros anteriores.
+            const baseUrl = window.location.href.split('?')[0].split('#')[0];
+            const joinUrl = `${baseUrl}?pin=${pin}`;
+            
+            // Evaluamos defensivamente si QRCode está cargado y sus propiedades existen
+            const correctLevel = (typeof QRCode !== 'undefined' && QRCode.CorrectLevel) ? QRCode.CorrectLevel.M : 1;
+            
+            new QRCode(qrContainer, { 
+                text: joinUrl, 
+                width: 140, 
+                height: 140,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel: correctLevel
+            });
             
             playersListener = db.collection('games').doc(gameId).collection('players').onSnapshot(snap => {
                 const list = document.getElementById('lobbyPlayersList');
@@ -1376,9 +1427,9 @@
                     const p = doc.data();
                     const li = document.createElement('li'); 
                     const initial = p.name.charAt(0).toUpperCase();
-                    li.className = "flex items-center gap-2.5 p-3.5 bg-slate-900/60 border border-slate-900 rounded-xl text-sm font-semibold text-white transition hover:bg-slate-900/90";
+                    li.className = "flex items-center gap-2 p-2 bg-slate-900/60 border border-slate-900 rounded-xl text-xs font-semibold text-white transition hover:bg-slate-900/90";
                     li.innerHTML = `
-                        <div class="w-8 h-8 rounded-full bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-xs shrink-0">${initial}</div>
+                        <div class="w-6 h-6 rounded-full bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-[10px] shrink-0">${initial}</div>
                         <span class="truncate">${p.name}</span>
                     `;
                     list.appendChild(li); 
@@ -1486,7 +1537,7 @@
                 btn.innerHTML = q.options[i];
                 btn.onclick = () => handleMultiplayerAnswer(i, q.correctAnswerIndex);
                 btn.disabled = false;
-                btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 btn-3d-option rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full";
+                btn.className = "answer-button min-h-[50px] text-xs sm:text-base font-semibold py-3 px-4 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option";
                 MathJax.typesetPromise();
             });
 
@@ -1520,11 +1571,11 @@
             const buttons = document.querySelectorAll('.answer-button');
             buttons.forEach((btn, i) => { 
                 if (i === correctAnswerIndex) {
-                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-bold py-4 px-6 btn-3d-correct rounded-2xl flex items-center justify-center text-center math-container w-full";
+                    btn.className = "answer-button min-h-[50px] text-xs sm:text-base font-bold py-3 px-4 btn-3d-correct rounded-xl flex items-center justify-center text-center math-container w-full";
                 } else if (selectedIndex === i) {
-                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-bold py-4 px-6 btn-3d-incorrect rounded-2xl flex items-center justify-center text-center math-container w-full";
+                    btn.className = "answer-button min-h-[50px] text-xs sm:text-base font-bold py-3 px-4 btn-3d-incorrect rounded-xl flex items-center justify-center text-center math-container w-full";
                 } else {
-                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 btn-3d-disabled-neutral rounded-2xl flex items-center justify-center text-center math-container w-full";
+                    btn.className = "answer-button min-h-[50px] text-xs sm:text-base font-semibold py-3 px-4 btn-3d-disabled-neutral rounded-xl flex items-center justify-center text-center math-container w-full";
                 }
             });
             
@@ -1631,7 +1682,7 @@
                                 icon = `<i data-lucide="award" class="w-4.5 h-4.5 text-amber-600"></i>`;
                             }
 
-                            li.className = `flex items-center justify-between p-3.5 border rounded-xl text-sm ${badgeStyle}`;
+                            li.className = `flex items-center justify-between p-3 border rounded-xl text-sm ${badgeStyle}`;
                             li.innerHTML = `
                                 <div class="flex items-center gap-3">
                                     ${icon}
@@ -1870,9 +1921,9 @@
                     displayCustomQuestionsList();
                     sound.playCorrect();
                     if (errorRows.length > 0) {
-                        await customAlert(`Se importaron ${loadedCount} preguntas con éxito. Las filas [${errorRows.join(', ')}] tenían errores y fueron omitidas.`, "Carga con Advertencias");
+                        await customAlert("Se importaron " + loadedCount + " preguntas con éxito. Las filas [" + errorRows.join(', ') + "] tenían errores y fueron omitidas.", "Carga con Advertencias");
                     } else {
-                        await customAlert(`¡Éxito! Se han importado ${loadedCount} preguntas a tu colección personalizada.`, "Carga Completa");
+                        await customAlert("¡Éxito! Se han importado " + loadedCount + " preguntas a tu colección personalizada.", "Carga Completa");
                     }
                 } else if (targetContext === 'admin') {
                     adminQuestions = adminQuestions.concat(tempQuestions);
@@ -1880,9 +1931,9 @@
                     saveCurrentQuestions();
                     sound.playCorrect();
                     if (errorRows.length > 0) {
-                        await customAlert(`Se añadieron ${loadedCount} preguntas a este tema. Las filas [${errorRows.join(', ')}] tenían errores y fueron omitidas.`, "Carga con Advertencias");
+                        await customAlert("Se añadieron " + loadedCount + " preguntas a este tema. Las filas [" + errorRows.join(', ') + "] tenían errores y fueron omitidas.", "Carga con Advertencias");
                     } else {
-                        await customAlert(`¡Éxito! Se han añadido ${loadedCount} preguntas al tema de forma local en tu navegador. Recuerda presionar 'Guardar Cambios del Tema'.`, "Carga Completa");
+                        await customAlert("¡Éxito! Se han añadido " + loadedCount + " preguntas al tema de forma local en tu navegador. Recuerda presionar 'Guardar Cambios del Tema'.", "Carga Completa");
                     }
                 }
             };
@@ -1890,11 +1941,23 @@
             reader.readAsText(file, 'UTF-8');
         }
 
-        // --- INICIALIZACIÓN ---
+        // --- INICIALIZACIÓN Y DETECCIÓN AUTOMÁTICA DE PIN ---
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             loadSavedCustomGameSetsFromStorage();
             restartGame();
+
+            // --- ESCUCHADOR DE URL: REDIRECCIÓN DE PIN DESDE EL CÓDIGO QR ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const pinFromUrl = urlParams.get('pin');
+            if (pinFromUrl) {
+                showJoinScreen();
+                document.getElementById('pinInput').value = pinFromUrl;
+                // Colocamos el cursor de inmediato en el casillero del Nombre
+                setTimeout(() => {
+                    document.getElementById('playerNameInput').focus();
+                }, 600);
+            }
         });
     </script>
 </body>
