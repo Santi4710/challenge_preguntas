@@ -234,6 +234,7 @@
         }
     </style>
     
+    <!-- Script MathJax -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>
         window.MathJax = { tex: { inlineMath: [['$', '$']] } };
@@ -282,7 +283,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                     <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between space-y-4">
                         <div>
-                            <div class="bg-amber-500/10 text-amber-450 p-2.5 rounded-xl w-fit mb-2">
+                            <div class="bg-amber-500/10 text-amber-455 p-2.5 rounded-xl w-fit mb-2">
                                 <i data-lucide="users" class="w-6 h-6"></i>
                             </div>
                             <h3 class="text-lg font-bold text-white">Unirse a una Partida</h3>
@@ -315,7 +316,7 @@
                     
                     <div class="space-y-4 bg-slate-950/45 border border-slate-900 rounded-2xl p-4 sm:p-5 text-left">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <h4 class="text-xs font-black text-slate-450 uppercase tracking-widest flex items-center gap-2">
+                            <h4 class="text-xs font-black text-slate-455 uppercase tracking-widest flex items-center gap-2">
                                 <i data-lucide="user" class="w-4 h-4 text-emerald-455"></i>
                                 Jugar solo (Física)
                             </h4>
@@ -548,9 +549,9 @@
                 </div>
                 <p id="adminCurrentTopicDisplay" class="text-xs text-slate-400 italic bg-slate-900/60 py-2 px-4 rounded-lg">Selecciona un tema para empezar.</p>
                 <div class="grid grid-cols-3 gap-3">
-                    <button onclick="loadQuestionsForAdmin('work_energy')" class="btn-3d-slate text-white font-bold py-2 px-3 rounded-lg text-xs">Trabajo y Energía</button>
-                    <button onclick="loadQuestionsForAdmin('newton_laws')" class="btn-3d-slate text-white font-bold py-2 px-3 rounded-lg text-xs">Leyes de Newton</button>
-                    <button onclick="loadQuestionsForAdmin('kinematics')" class="btn-3d-slate text-white font-bold py-2 px-3 rounded-lg text-xs">Cinemática</button>
+                    <button onclick="loadQuestionsForAdmin('work_energy')" class="btn-3d-slate text-white font-bold py-2.5 px-3 rounded-lg text-xs">Trabajo y Energía</button>
+                    <button onclick="loadQuestionsForAdmin('newton_laws')" class="btn-3d-slate text-white font-bold py-2.5 px-3 rounded-lg text-xs">Leyes de Newton</button>
+                    <button onclick="loadQuestionsForAdmin('kinematics')" class="btn-3d-slate text-white font-bold py-2.5 px-3 rounded-lg text-xs">Cinemática</button>
                 </div>
 
                 <!-- Carga masiva en Admin -->
@@ -591,12 +592,12 @@
                         </div>
                         <div class="space-y-1">
                             <label for="explanationTextAdmin" class="text-xs text-slate-400">Explicación:</label>
-                            <textarea id="explanationTextAdmin" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white h-10 resize-none outline-none"></textarea>
+                            <textarea id="explanationTextAdmin" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-white h-10 resize-none outline-none"></textarea>
                         </div>
                     </div>
                     <div class="flex gap-3">
-                        <button onclick="addOrUpdateQuestion()" class="flex-1 btn-3d-indigo text-white font-bold py-2 px-4 rounded-xl text-xs">Guardar Pregunta</button>
-                        <button onclick="clearAdminQuestionForm()" class="btn-3d-slate text-slate-300 font-bold py-2 px-4 rounded-xl text-xs">Limpiar</button>
+                        <button onclick="addOrUpdateQuestion()" class="flex-1 btn-3d-indigo text-white font-bold py-2.5 px-4 rounded-xl text-xs">Guardar Pregunta</button>
+                        <button onclick="clearAdminQuestionForm()" class="btn-3d-slate text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs">Limpiar</button>
                     </div>
                 </div>
 
@@ -620,7 +621,7 @@
                             <div id="timerProgress" class="h-full rounded-full transition-all duration-1000 ease-linear flex items-center justify-center text-[10px] font-black text-white bg-indigo-600" style="width: 100%;">15s</div>
                         </div>
                     </div>
-                    <div id="currentScoreDisplay" class="text-indigo-450 font-bold text-sm bg-indigo-500/10 px-4 py-1.5 rounded-xl border border-indigo-500/20 shadow-inner flex items-center gap-2 whitespace-nowrap">
+                    <div id="currentScoreDisplay" class="text-indigo-455 font-bold text-sm bg-indigo-500/10 px-4 py-1.5 rounded-xl border border-indigo-500/20 shadow-inner flex items-center gap-2 whitespace-nowrap">
                         <i data-lucide="award" class="w-4 h-4"></i>
                         <span>Puntuación: 0</span>
                     </div>
@@ -705,6 +706,7 @@
 
     <!-- SDKs de Firebase y Librerías auxiliares -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     
@@ -722,6 +724,15 @@
         
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+
+        // Autenticación Anónima Automática para asegurar permisos en GitHub Pages
+        firebase.auth().signInAnonymously()
+            .then(() => {
+                console.log("Conectado con éxito al servidor del juego (Sesión Anónima)");
+            })
+            .catch((error) => {
+                console.error("Error de conexión con el servidor de autenticación:", error);
+            });
 
         // --- PREGUNTAS POR DEFECTO ---
         const default_questions_work_energy = [
@@ -1255,14 +1266,13 @@
 
         async function deleteSavedCustomSet(index) {
             const setName = savedCustomGameSets[index].name;
-            if (await showConfirm(`¿Estás seguro de que quieres eliminar la partida personalizada "${setName}"?`, "Confirmar Borrado")) {
-                savedCustomGameSets.splice(index, 1);
-                saveCustomGameSetsToStorage();
-                displaySavedCustomSetsList();
-                if (editingCustomSetIndex === index) {
-                    prepareNewCustomSetForm();
-                    document.getElementById('customGameCreationArea').classList.add('hidden');
-                }
+            if (await showConfirm(`¿Estás seguro de que quieres eliminar la partida personalizada "${setName}"? Esta acción no se puede deshacer.`)) return;
+            savedCustomGameSets.splice(index, 1);
+            saveCustomGameSetsToStorage();
+            displaySavedCustomSetsList();
+            if (editingCustomSetIndex === index) {
+                prepareNewCustomSetForm();
+                document.getElementById('customGameCreationArea').classList.add('hidden');
             }
         }
         
@@ -1671,10 +1681,10 @@
                 li.innerHTML = `
                     <span class="truncate flex-1">Q${i+1}: ${q.question}</span> 
                     <div class="flex gap-2 shrink-0">
-                        <button class="bg-indigo-650 hover:bg-indigo-600 p-2 rounded-lg text-white" onclick="editAdminQuestion(${i})">
+                        <button class="bg-indigo-655 hover:bg-indigo-600 p-2 rounded-lg text-white" onclick="editAdminQuestion(${i})">
                             <i data-lucide="edit" class="w-3.5 h-3.5 text-white"></i>
                         </button>
-                        <button class="bg-rose-650 hover:bg-rose-600 p-2 rounded-lg text-white" onclick="deleteAdminQuestion(${i})">
+                        <button class="bg-rose-655 hover:bg-rose-600 p-2 rounded-lg text-white" onclick="deleteAdminQuestion(${i})">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5 text-white"></i>
                         </button>
                     </div>`; 
