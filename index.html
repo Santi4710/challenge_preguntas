@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Challenge! Un Juego Interactivo 🧠</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -23,6 +24,7 @@
             }
         }
     </script>
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -220,6 +222,16 @@
             from { box-shadow: 0 0 8px rgba(34, 197, 94, 0.4); }
             to { box-shadow: 0 0 20px rgba(34, 197, 94, 0.8); }
         }
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 3px;
+        }
     </style>
     
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -229,10 +241,12 @@
 </head>
 <body class="min-h-screen text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white p-4 sm:p-6 relative">
 
+    <!-- LUCES DE FONDO -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-[20%] left-[20%] w-[55vw] h-[55vw] rounded-full bg-indigo-600/10 blur-[130px] animate-ambient-light-1"></div>
     </div>
 
+    <!-- CABECERA -->
     <header class="max-w-5xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 bg-slate-950/70 backdrop-blur-md border border-slate-900 rounded-2xl p-4 shadow-2xl z-10 relative">
         <div class="flex items-center gap-3">
             <div class="bg-indigo-600/20 p-2.5 rounded-xl border border-indigo-500/30">
@@ -244,8 +258,9 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <button onclick="toggleMute()" class="bg-slate-900 text-indigo-400 p-2.5 rounded-xl border border-slate-800 text-xs font-bold shadow-md cursor-pointer">
+            <button onclick="toggleMute()" id="soundToggleBtn" class="bg-slate-900 text-indigo-400 p-2.5 rounded-xl border border-slate-800 text-xs font-bold shadow-md cursor-pointer flex items-center gap-2">
                 <i id="soundIcon" data-lucide="volume-2" class="w-5 h-5"></i>
+                <span id="soundText" class="hidden sm:inline">Sonido Activo</span>
             </button>
             <button onclick="restartGame()" class="bg-slate-900 text-slate-300 p-2.5 rounded-xl border border-slate-800 text-xs font-bold shadow-md cursor-pointer">
                 <i data-lucide="home" class="w-5 h-5"></i>
@@ -253,9 +268,11 @@
         </div>
     </header>
 
+    <!-- CUERPO DEL JUEGO -->
     <main class="max-w-4xl w-full mx-auto flex-grow flex flex-col justify-center my-4 z-10 relative">
         <div class="bg-slate-950/80 backdrop-blur-xl rounded-3xl shadow-2xl p-6 sm:p-8 relative overflow-hidden card-glow-border">
             
+            <!-- PANTALLA: BIENVENIDA -->
             <div id="welcomeScreen" class="game-screen active space-y-6 relative z-20">
                 <div class="text-center space-y-2">
                     <h2 class="text-3xl font-extrabold text-white">¡Bienvenido al Desafío!</h2>
@@ -264,32 +281,79 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                     <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between space-y-4">
-                        <h3 class="text-lg font-bold text-white">Unirse a una Partida</h3>
+                        <div>
+                            <div class="bg-amber-500/10 text-amber-450 p-2.5 rounded-xl w-fit mb-2">
+                                <i data-lucide="users" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Unirse a una Partida</h3>
+                            <p class="text-xs text-slate-400 mt-1">Introduce el PIN de acceso para competir en tiempo real.</p>
+                        </div>
                         <button onclick="showJoinScreen()" class="w-full btn-3d-amber text-slate-950 font-extrabold py-3.5 px-4 rounded-xl cursor-pointer">Ingresar PIN</button>
                     </div>
                     <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between space-y-4">
-                        <h3 class="text-lg font-bold text-white">Partidas Personalizadas</h3>
+                        <div>
+                            <div class="bg-cyan-500/10 text-cyan-400 p-2.5 rounded-xl w-fit mb-2">
+                                <i data-lucide="folder-plus" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Partidas Personalizadas</h3>
+                            <p class="text-xs text-slate-400 mt-1">Crea, edita o importa tus sets de preguntas preferidos.</p>
+                        </div>
                         <button onclick="showCustomGameSetup()" class="w-full btn-3d-cyan text-white font-extrabold py-3.5 px-4 rounded-xl cursor-pointer">Gestionar Configuración</button>
                     </div>
                 </div>
 
                 <div class="border-t border-slate-900 pt-6 space-y-6 text-center">
-                    <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest">Crear Partida (Host)</h4>
+                    <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
+                        <i data-lucide="radio" class="w-4 h-4 text-indigo-400"></i>
+                        Crear Partida (Host)
+                    </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <button onclick="showHostSetup('work_energy')" class="btn-3d-indigo text-white text-xs font-bold py-3 px-4 rounded-xl">Trabajo y Energía</button>
                         <button onclick="showHostSetup('newton_laws')" class="btn-3d-indigo text-white text-xs font-bold py-3 px-4 rounded-xl">Leyes de Newton</button>
                         <button onclick="showHostSetup('kinematics')" class="btn-3d-indigo text-white text-xs font-bold py-3 px-4 rounded-xl">Cinemática</button>
                     </div>
-                    <button onclick="showAdminScreen()" class="text-[10px] font-bold text-slate-400 hover:text-indigo-400 py-2 px-5 rounded-full border border-slate-850 cursor-pointer uppercase">Administrar Preguntas Base</button>
+                    
+                    <div class="space-y-4 bg-slate-950/45 border border-slate-900 rounded-2xl p-4 sm:p-5 text-left">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <h4 class="text-xs font-black text-slate-450 uppercase tracking-widest flex items-center gap-2">
+                                <i data-lucide="user" class="w-4 h-4 text-emerald-455"></i>
+                                Jugar solo (Física)
+                            </h4>
+                            <div class="flex items-center gap-2">
+                                <label for="spNumQuestions" class="text-xs text-slate-400 font-semibold whitespace-nowrap">N° Preguntas:</label>
+                                <input type="number" id="spNumQuestions" value="10" min="1" max="20" class="w-16 bg-slate-900 border border-slate-800 rounded-lg text-center text-white py-1 text-sm font-bold focus:border-indigo-550 outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+                            <button onclick="startGame('work_energy')" class="btn-3d-emerald text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i> Trabajo y Energía
+                            </button>
+                            <button onclick="startGame('newton_laws')" class="btn-3d-emerald text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i> Leyes de Newton
+                            </button>
+                            <button onclick="startGame('kinematics')" class="btn-3d-emerald text-white text-xs font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i> Cinemática
+                            </button>
+                        </div>
+                    </div>
+
+                    <button onclick="showAdminScreen()" class="text-[10px] font-bold text-slate-400 hover:text-indigo-455 py-2 px-5 rounded-full border border-slate-850 cursor-pointer uppercase transition">Administrar Preguntas Base</button>
                 </div>
             </div>
 
+            <!-- CONFIGURAR PARTIDA (HOST) -->
             <div id="hostSetupScreen" class="game-screen hidden space-y-6 z-20">
                 <h2 class="text-2xl font-extrabold text-white">Configurar Partida</h2>
-                <div class="space-y-4 max-w-md mx-auto">
-                    <input type="text" id="hostNameInput" placeholder="Nombre de Anfitrión" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none">
-                    <input type="number" id="mpNumQuestions" value="10" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none">
-                    <div id="hostSetupMessage" class="text-sm font-bold text-rose-400 text-center"></div>
+                <div class="space-y-4 max-w-md mx-auto text-left">
+                    <div class="space-y-1">
+                        <label for="hostNameInput" class="text-xs font-semibold text-slate-400">Nombre de Anfitrión:</label>
+                        <input type="text" id="hostNameInput" placeholder="Ej: Prof. Geller" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="mpNumQuestions" class="text-xs font-semibold text-slate-400">Número de Preguntas (1-20):</label>
+                        <input type="number" id="mpNumQuestions" value="10" min="1" max="20" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none focus:border-indigo-500">
+                    </div>
+                    <div id="hostSetupMessage" class="text-sm font-bold text-rose-400 text-center min-h-[1.25rem]"></div>
                     <div class="flex gap-4">
                         <button id="createGameButton" class="flex-1 btn-3d-indigo text-white font-extrabold py-3.5 rounded-xl">Crear Partida</button>
                         <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-extrabold py-3.5 px-6 rounded-xl">Volver</button>
@@ -297,31 +361,349 @@
                 </div>
             </div>
 
-            <div id="questionScreen" class="game-screen hidden space-y-6 z-20">
-                <div class="flex items-center justify-between bg-slate-900/40 border border-slate-900 p-4 rounded-2xl">
-                    <div class="flex-1 bg-slate-950 h-5 rounded-full overflow-hidden border border-slate-900 p-0.5 shadow-inner">
-                        <div id="timerProgress" class="h-full rounded-full transition-all duration-1000 ease-linear flex items-center justify-center text-[10px] font-black text-white bg-indigo-600" style="width: 100%;">15s</div>
+            <!-- PARTIDAS PERSONALIZADAS -->
+            <div id="customGameSetupScreen" class="game-screen hidden space-y-6 relative z-20">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-4 text-left">
+                    <button onclick="restartGame()" class="text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <h2 class="text-2xl font-extrabold text-white">Partidas Personalizadas</h2>
+                </div>
+
+                <div id="savedCustomSetsSection" class="bg-slate-900/40 border border-slate-900 rounded-2xl p-5 space-y-4 text-left">
+                    <h3 class="text-base font-bold text-slate-300 flex items-center gap-2">
+                        <i data-lucide="database" class="w-5 h-5 text-indigo-400"></i>
+                        Mis Colecciones Guardadas (Local)
+                    </h3>
+                    <ul id="savedCustomSetsListUL" class="space-y-3 max-h-52 overflow-y-auto custom-scroll pr-1"></ul>
+                    <div class="flex justify-end pt-2">
+                        <button onclick="prepareNewCustomSetForm()" class="btn-3d-indigo text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Crear Nueva Configuración
+                        </button>
                     </div>
-                    <div id="currentScoreDisplay" class="ml-4 text-indigo-400 font-bold text-sm">Puntuación: 0</div>
                 </div>
-                <div id="questionText" class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 text-center text-lg font-bold text-white min-h-[100px] flex items-center justify-center">Cargando...</div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="optionsContainer">
-                    <button class="answer-button min-h-[60px] btn-3d-option rounded-2xl text-slate-100 flex items-center justify-center text-center px-4"></button>
-                    <button class="answer-button min-h-[60px] btn-3d-option rounded-2xl text-slate-100 flex items-center justify-center text-center px-4"></button>
-                    <button class="answer-button min-h-[60px] btn-3d-option rounded-2xl text-slate-100 flex items-center justify-center text-center px-4"></button>
-                    <button class="answer-button min-h-[60px] btn-3d-option rounded-2xl text-slate-100 flex items-center justify-center text-center px-4"></button>
+
+                <div id="customGameCreationArea" class="hidden space-y-5 bg-slate-900/20 border border-slate-900 rounded-2xl p-5 text-left">
+                    <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-900 pb-2">
+                        <i data-lucide="edit-3" class="w-5 h-5 text-cyan-400"></i> Diseñador de Preguntas
+                    </h3>
+
+                    <!-- Carga Masiva CSV -->
+                    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 space-y-3">
+                        <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="file-up" class="w-4 h-4 text-indigo-400"></i> Importar desde Excel / CSV (Soporta LaTeX)
+                        </h4>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            Carga preguntas de golpe. El archivo debe ser un formato CSV separado por punto y coma (`;`).
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center gap-3 pt-1">
+                            <label class="btn-3d-indigo text-white text-xs font-bold py-2 px-4 rounded-xl cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto">
+                                <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                                <span>Subir Archivo CSV</span>
+                                <input type="file" id="csvFileInputCustom" accept=".csv" class="hidden" onchange="handleCSVUpload(event, 'custom')">
+                            </label>
+                            <button onclick="downloadCSVTemplate()" class="btn-3d-slate text-indigo-300 text-xs font-bold py-2 px-4 rounded-xl flex items-center justify-center gap-2 w-full sm:w-auto">
+                                <i data-lucide="download" class="w-4 h-4"></i> Plantilla CSV
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label for="customHostName" class="text-xs font-semibold text-slate-400">Nombre del Anfitrión:</label>
+                            <input type="text" id="customHostName" placeholder="Einstein" class="bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-3 text-sm text-white w-full outline-none focus:border-indigo-550">
+                        </div>
+                        <div class="space-y-1">
+                            <label for="customGameSetName" class="text-xs font-semibold text-slate-400">Nombre de la Colección:</label>
+                            <input type="text" id="customGameSetName" placeholder="Ej: Examen de Física" class="bg-slate-900 border border-slate-800 rounded-xl py-2.5 px-3 text-sm text-white w-full outline-none focus:border-indigo-550">
+                        </div>
+                    </div>
+
+                    <div id="customQuestionForm" class="bg-slate-950/60 border border-slate-900 rounded-xl p-4 space-y-4">
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-indigo-400">Texto de la Pregunta ($LaTeX$ admitido):</label>
+                            <textarea id="customQText" placeholder="Ej: ¿Qué trabajo realiza una fuerza de 10 N?" class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white w-full h-16 outline-none resize-none focus:border-indigo-500"></textarea>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="space-y-1">
+                                <label class="text-xs font-semibold text-slate-400">Opción A (Correcta por defecto):</label>
+                                <input type="text" id="customOpt0" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-semibold text-slate-400">Opción B:</label>
+                                <input type="text" id="customOpt1" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-semibold text-slate-400">Opción C:</label>
+                                <input type="text" id="customOpt2" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-semibold text-slate-400">Opción D:</label>
+                                <input type="text" id="customOpt3" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-xs font-semibold text-slate-400">Respuesta Correcta:</label>
+                                <select id="customCorrectIndex" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full outline-none">
+                                    <option value="0">Opción A</option><option value="1">Opción B</option><option value="2">Opción C</option><option value="3">Opción D</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-xs font-semibold text-slate-400">Explicación ($LaTeX$ admitido):</label>
+                                <textarea id="customExplanationText" placeholder="Explicación de la respuesta." class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-sm text-white w-full h-10 resize-none outline-none"></textarea>
+                            </div>
+                        </div>
+                        <button onclick="addCustomQuestion()" class="w-full btn-3d-indigo text-white font-bold py-3 rounded-xl text-xs flex items-center justify-center gap-2">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> Guardar Pregunta en la Lista
+                        </button>
+                        <input type="hidden" id="editingCustomQuestionIndex" value="-1">
+                    </div>
+
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase">Preguntas en esta Colección:</h4>
+                        <ul id="customQuestionsList" class="space-y-2 max-h-40 overflow-y-auto custom-scroll pr-1"></ul>
+                    </div>
+
+                    <div id="customGameMessage" class="text-sm font-bold text-center min-h-[1.25rem]"></div>
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <button id="saveAndCreateCustomGameButton" onclick="saveAndCreateCustomMultiplayerGame()" class="flex-1 btn-3d-cyan text-white font-extrabold py-3.5 px-4 rounded-xl text-sm">Guardar y Abrir Multijugador</button>
+                        <button onclick="saveCustomSetChangesOnly()" class="btn-3d-slate text-white font-extrabold py-3.5 px-4 rounded-xl text-sm">Guardar Cambios Localmente</button>
+                    </div>
                 </div>
-                <div id="feedback" class="text-center font-black text-lg min-h-[28px]"></div>
-                <div id="explanationContainer" class="hidden bg-slate-900/30 border border-slate-900 rounded-2xl p-5 text-sm text-slate-300"></div>
+
+                <div class="flex justify-center border-t border-slate-900 pt-4">
+                    <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-bold py-2.5 px-6 rounded-xl text-xs">Volver al Inicio</button>
+                </div>
+            </div>
+
+            <!-- UNIRSE A PARTIDA (PIN) -->
+            <div id="joinScreen" class="game-screen hidden space-y-6 relative z-20">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-4 text-left">
+                    <button onclick="restartGame()" class="text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <h2 class="text-2xl font-extrabold text-white">Unirse a una Partida</h2>
+                </div>
+                <div class="space-y-4 max-w-sm mx-auto text-left">
+                    <div class="space-y-1">
+                        <label for="playerNameInput" class="text-sm font-semibold text-slate-350">Tu Nombre:</label>
+                        <input type="text" id="playerNameInput" placeholder="Ej: Newton" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none">
+                    </div>
+                    <div class="space-y-1">
+                        <label for="pinInput" class="text-sm font-semibold text-slate-355">PIN del Lobby:</label>
+                        <input type="text" id="pinInput" placeholder="123456" maxlength="6" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-3.5 px-4 outline-none text-center font-bold tracking-[0.2em] text-lg">
+                    </div>
+                    <div id="joinMessage" class="text-sm font-bold text-rose-400 text-center min-h-[1.25rem]"></div>
+                    <div class="flex gap-4">
+                        <button onclick="joinGame()" class="flex-1 btn-3d-amber text-slate-950 font-extrabold py-3.5 rounded-xl">¡Unirme!</button>
+                        <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-extrabold py-3.5 px-6 rounded-xl">Volver</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOBBY DE ESPERA (HOST) -->
+            <div id="lobbyScreen" class="game-screen hidden space-y-6 relative z-20 text-center">
+                <div class="space-y-2">
+                    <div class="bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full text-xs font-bold w-fit mx-auto border border-indigo-500/20">LOBBY DE ESPERA</div>
+                    <h2 class="text-3xl font-black text-white">¡Partida Creada!</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center bg-slate-900/30 border border-slate-900 p-6 rounded-3xl">
+                    <div class="space-y-3 text-center md:text-left">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">PIN de Acceso</span>
+                        <div id="lobbyPin" class="text-4xl font-black text-indigo-400 tracking-wider bg-slate-950/80 p-4 rounded-2xl border border-slate-900">------</div>
+                    </div>
+                    <div class="flex flex-col items-center justify-center space-y-2 bg-slate-950/60 p-4 rounded-2xl border border-slate-900">
+                        <span class="text-xs text-slate-400 font-bold">Código QR de Escaneo</span>
+                        <div id="qrCodeContainer" class="bg-white p-2 rounded-lg"></div>
+                    </div>
+                </div>
+                <div class="space-y-3 text-left">
+                    <h4 class="text-sm font-bold text-slate-300 flex justify-between">
+                        <span>Jugadores Unidos:</span>
+                        <span id="playerCountDisplay" class="bg-indigo-600/20 text-indigo-300 px-2 rounded-full text-xs border border-indigo-500/30">0</span>
+                    </h4>
+                    <ul id="lobbyPlayersList" class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-52 overflow-y-auto custom-scroll p-1"></ul>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4 border-t border-slate-900 pt-5">
+                    <button id="startMultiplayerGameButton" onclick="startMultiplayerGame()" class="flex-1 btn-3d-emerald text-slate-950 font-extrabold py-3.5 px-6 rounded-xl">Comenzar Partida</button>
+                    <button onclick="cancelGame()" class="btn-3d-rose text-white font-extrabold py-3.5 px-6 rounded-xl">Cancelar Partida</button>
+                </div>
+            </div>
+
+            <!-- ESPERA DEL JUGADOR -->
+            <div id="playerWaitingScreen" class="game-screen hidden space-y-6 text-center py-8 relative z-20">
+                <div class="w-16 h-16 border-4 border-amber-550 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-extrabold text-white">¡Te has unido con éxito!</h2>
+                    <p class="text-slate-400 text-sm max-w-sm mx-auto">Esperando que el anfitrión inicie la partida...</p>
+                </div>
+                <div class="bg-slate-900/40 border border-slate-900 rounded-2xl p-4 max-w-xs mx-auto">
+                    <span class="text-xs text-slate-400 uppercase">PIN de Partida</span>
+                    <div id="waitingForPin" class="text-3xl font-black text-amber-400 tracking-wider">------</div>
+                </div>
+            </div>
+
+            <!-- ADMINISTRAR PREGUNTAS BASE -->
+            <div id="adminScreen" class="game-screen hidden space-y-6 relative z-20">
+                <div class="flex items-center border-b border-slate-900 pb-4 text-left">
+                    <button onclick="restartGame()" class="text-slate-400 hover:text-white transition mr-3"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <h2 class="text-2xl font-extrabold text-white">Administrador de Preguntas Predefinidas</h2>
+                </div>
+                <p id="adminCurrentTopicDisplay" class="text-xs text-slate-400 italic bg-slate-900/60 py-2 px-4 rounded-lg">Selecciona un tema para empezar.</p>
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="loadQuestionsForAdmin('work_energy')" class="btn-3d-slate text-white font-bold py-2 px-3 rounded-lg text-xs">Trabajo y Energía</button>
+                    <button onclick="loadQuestionsForAdmin('newton_laws')" class="btn-3d-slate text-white font-bold py-2 px-3 rounded-lg text-xs">Leyes de Newton</button>
+                    <button onclick="loadQuestionsForAdmin('kinematics')" class="btn-3d-slate text-white font-bold py-2 px-3 rounded-lg text-xs">Cinemática</button>
+                </div>
+
+                <!-- Carga masiva en Admin -->
+                <div id="adminCSVUploadArea" class="hidden bg-slate-900/40 border border-slate-900 rounded-2xl p-5 text-left space-y-3">
+                    <h3 class="text-xs font-bold text-indigo-300 uppercase flex items-center gap-2">
+                        <i data-lucide="file-up" class="w-4 h-4"></i> Importación Masiva (Tema Actual)
+                    </h3>
+                    <div class="flex flex-col sm:flex-row items-center gap-3">
+                        <label class="btn-3d-indigo text-white text-xs font-bold py-2 px-4 rounded-xl cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <i data-lucide="upload-cloud" class="w-4 h-4"></i> Subir CSV
+                            <input type="file" id="csvFileInputAdmin" accept=".csv" class="hidden" onchange="handleCSVUpload(event, 'admin')">
+                        </label>
+                        <button onclick="downloadCSVTemplate()" class="btn-3d-slate text-indigo-300 text-xs font-bold py-2 px-4 rounded-xl flex items-center justify-center gap-2 w-full sm:w-auto">
+                            <i data-lucide="download" class="w-4 h-4"></i> Plantilla CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Formulario Admin -->
+                <div id="adminFormSection" class="hidden space-y-4 bg-slate-900/40 border border-slate-900 rounded-2xl p-5 text-left">
+                    <h3 class="text-sm font-bold text-indigo-300">Añadir/Editar Pregunta</h3>
+                    <div class="space-y-1">
+                        <label for="qText" class="text-xs text-slate-400">Pregunta:</label>
+                        <textarea id="qText" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-sm text-white focus:border-indigo-500 outline-none resize-none h-12"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label for="opt0" class="text-xs text-slate-400">Opción A:</label><input type="text" id="opt0" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white"></div>
+                        <div><label for="opt1" class="text-xs text-slate-400">Opción B:</label><input type="text" id="opt1" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white"></div>
+                        <div><label for="opt2" class="text-xs text-slate-400">Opción C:</label><input type="text" id="opt2" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white"></div>
+                        <div><label for="opt3" class="text-xs text-slate-400">Opción D:</label><input type="text" id="opt3" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white"></div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label for="correctIndexAdmin" class="text-xs text-slate-400">Respuesta Correcta:</label>
+                            <select id="correctIndexAdmin" class="bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-white w-full outline-none">
+                                <option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label for="explanationTextAdmin" class="text-xs text-slate-400">Explicación:</label>
+                            <textarea id="explanationTextAdmin" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white h-10 resize-none outline-none"></textarea>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="addOrUpdateQuestion()" class="flex-1 btn-3d-indigo text-white font-bold py-2 px-4 rounded-xl text-xs">Guardar Pregunta</button>
+                        <button onclick="clearAdminQuestionForm()" class="btn-3d-slate text-slate-300 font-bold py-2 px-4 rounded-xl text-xs">Limpiar</button>
+                    </div>
+                </div>
+
+                <div id="adminListSection" class="hidden space-y-3 text-left">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase">Preguntas del Tema:</h3>
+                    <ul id="questionsList" class="space-y-2 max-h-48 overflow-y-auto custom-scroll pr-1"></ul>
+                    <button onclick="saveCurrentQuestions()" class="w-full btn-3d-emerald text-slate-950 font-extrabold py-2.5 px-4 rounded-xl text-xs">Guardar Cambios en Tema</button>
+                </div>
+                <div id="adminMessage" class="text-xs font-bold text-center text-emerald-450 min-h-[1.25rem]"></div>
+                <div class="flex justify-center border-t border-slate-900 pt-4">
+                    <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-bold py-2.5 px-6 rounded-xl text-xs">Volver al Inicio</button>
+                </div>
+            </div>
+
+            <!-- JUEGO PRINCIPAL (PREGUNTAS) -->
+            <div id="questionScreen" class="game-screen hidden space-y-6 relative z-20">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/40 border border-slate-900 p-4 rounded-2xl">
+                    <div class="w-full sm:flex-1 flex items-center gap-3">
+                        <i data-lucide="timer" class="w-5 h-5 text-indigo-400 animate-pulse"></i>
+                        <div class="flex-1 bg-slate-950 h-5 rounded-full overflow-hidden border border-slate-900 p-0.5 shadow-inner">
+                            <div id="timerProgress" class="h-full rounded-full transition-all duration-1000 ease-linear flex items-center justify-center text-[10px] font-black text-white bg-indigo-600" style="width: 100%;">15s</div>
+                        </div>
+                    </div>
+                    <div id="currentScoreDisplay" class="text-indigo-450 font-bold text-sm bg-indigo-500/10 px-4 py-1.5 rounded-xl border border-indigo-500/20 shadow-inner flex items-center gap-2 whitespace-nowrap">
+                        <i data-lucide="award" class="w-4 h-4"></i>
+                        <span>Puntuación: 0</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 sm:p-8 text-center shadow-lg relative min-h-[140px] flex items-center justify-center">
+                    <div id="questionText" class="text-lg sm:text-xl font-bold text-white math-container tracking-wide leading-relaxed">Cargando...</div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-3" id="optionsContainer">
+                    <button class="answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                </div>
+
+                <div id="feedback" class="text-center font-black text-lg transition-all duration-300 min-h-[28px]"></div>
+
+                <div id="explanationContainer" class="hidden bg-slate-900/30 border border-slate-900 rounded-2xl p-5 space-y-2 text-left">
+                    <h5 class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <i data-lucide="lightbulb" class="w-4.5 h-4.5 animate-bounce"></i> Explicación Científica
+                    </h5>
+                    <p id="explanation" class="text-xs sm:text-sm text-slate-300 math-container leading-relaxed text-justify"></p>
+                </div>
+
                 <div class="flex items-center justify-between border-t border-slate-900 pt-4">
-                    <p id="progressText" class="text-xs text-slate-400 font-bold uppercase">Pregunta -- de --</p>
-                    <button id="endGameButton" onclick="endGame()" class="btn-3d-rose text-white font-bold py-2 px-4 rounded-xl text-xs">Finalizar</button>
+                    <p id="progressText" class="text-xs text-slate-400 font-bold uppercase tracking-wider">Pregunta -- de --</p>
+                    <button id="endGameButton" onclick="endGame()" class="btn-3d-rose text-white font-bold py-2 px-4 rounded-xl text-xs">Finalizar Partida</button>
+                </div>
+            </div>
+
+            <!-- RESULTADOS -->
+            <div id="resultsScreen" class="game-screen hidden space-y-6 relative z-20 text-center">
+                <div class="space-y-2">
+                    <div class="bg-indigo-500/10 text-indigo-400 p-3 rounded-full border border-indigo-500/20 w-fit mx-auto mb-2">
+                        <i data-lucide="trophy" class="w-10 h-10 animate-bounce"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-white">¡Juego Completado!</h2>
+                    <p class="text-slate-400 text-sm">Has finalizado el desafío científico.</p>
+                </div>
+                <div id="singlePlayerResults" class="hidden max-w-sm mx-auto bg-slate-900/40 border border-slate-900 rounded-2xl p-6 text-center space-y-3">
+                    <span class="text-xs text-slate-400 uppercase">Puntuación Final</span>
+                    <div id="finalScore" class="text-5xl font-black text-indigo-455 font-mono">0</div>
+                </div>
+                <div id="multiplayerResults" class="hidden space-y-6">
+                    <div class="bg-slate-900/30 border border-slate-900 rounded-3xl p-6 space-y-4">
+                        <h4 class="text-base font-bold text-slate-300 flex items-center justify-center gap-2">
+                            <i data-lucide="bar-chart-2" class="w-5 h-5"></i> Ranking Final
+                        </h4>
+                        <ul id="leaderboard" class="space-y-3 max-w-lg mx-auto text-left"></ul>
+                    </div>
+                </div>
+                <div class="flex justify-center pt-2">
+                    <button onclick="restartGame()" class="btn-3d-indigo text-white font-extrabold py-3.5 px-10 rounded-2xl text-sm">Volver al Inicio</button>
                 </div>
             </div>
 
         </div>
     </main>
 
+    <!-- FOOTER -->
+    <footer class="max-w-5xl w-full mx-auto text-center py-4 border-t border-slate-900/60 z-10 relative">
+        <p class="text-[10px] text-slate-500 tracking-wider">Desarrollado con fines educativos • Física Challenge v2.3</p>
+    </footer>
+
+    <!-- MODAL DE DIÁLOGO PERSONALIZADO -->
+    <div id="customDialogContainer" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-5 text-center transform scale-100 transition-all">
+            <div id="customDialogIconWrapper" class="bg-indigo-500/10 text-indigo-400 p-3 rounded-full border border-indigo-500/20 w-fit mx-auto">
+                <i data-lucide="alert-circle" id="customDialogIcon" class="w-8 h-8"></i>
+            </div>
+            <div class="space-y-2 text-center">
+                <h3 id="customDialogTitle" class="text-lg font-bold text-white">Atención</h3>
+                <p id="customDialogMessage" class="text-xs text-slate-400 leading-relaxed"></p>
+            </div>
+            <div class="flex gap-4 justify-center">
+                <button id="customDialogCancel" class="hidden flex-1 btn-3d-slate text-slate-300 font-bold py-2.5 px-4 rounded-xl text-xs">Cancelar</button>
+                <button id="customDialogOk" class="flex-1 btn-3d-indigo text-white font-bold py-2.5 px-4 rounded-xl text-xs">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SDKs de Firebase y Librerías auxiliares -->
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
@@ -341,33 +723,1167 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // --- LÓGICA DEL JUEGO (Mantenida del archivo original para asegurar funcionalidad) ---
-        // Se incluyen las funciones de manejo de pantallas, carga de preguntas CSV, 
-        // temporizador y comunicación con Firestore.
+        // --- PREGUNTAS POR DEFECTO ---
+        const default_questions_work_energy = [
+            { question: "¿Cuál es la unidad del Trabajo Mecánico en el SI?", options: ["Newton", "Vatio", "Joule", "Pascal"], correctAnswerIndex: 2, explanation: "La unidad del trabajo mecánico (y de la energía) es el Joule ($J$)." },
+            { question: "Si una fuerza $\\vec{F}$ es perpendicular al desplazamiento $\\vec{d}$ de un objeto, ¿cuánto trabajo se realiza?", options: ["Trabajo positivo ($W > 0$)", "Trabajo negativo ($W < 0$)", "Trabajo cero ($W = 0$)", "Depende de la magnitud de la fuerza"], correctAnswerIndex: 2, explanation: "Si la fuerza es perpendicular al desplazamiento, el ángulo $\\theta = 90^\\circ$. Como $\\cos(90^\\circ) = 0$, el trabajo es cero: $W = Fd\\cos(90^\\circ) = 0$." },
+            { question: "La energía que un objeto posee debido a su movimiento se llama:", options: ["Energía Potencial Gravitatoria ($U$)", "Energía Cinética ($K$)", "Energía Mecánica ($E_m$)", "Trabajo Mecánico ($W$)"], correctAnswerIndex: 1, explanation: "La Energía Cinética ($K$) es la energía asociada al movimiento, y se calcula con $K = \\frac{1}{2} m v^2$." },
+            { question: "Si la energía mecánica de un sistema se conserva, ¿qué implica esto?", options: ["La energía cinética es siempre mayor que la potencial.", "Solo actúan fuerzas no conservativas.", "La suma de la energía cinética y potencial es constante.", "El objeto está en reposo."], correctAnswerIndex: 2, explanation: "El Principio de Conservación de la Energía Mecánica establece que si solo actúan fuerzas conservativas, la energía mecánica total se mantiene constante ($E_{m, inicial} = E_{m, final}$)." },
+            { question: "En la ecuación de la Energía Potencial Gravitatoria ($U = mgh$), ¿qué representa $g$?", options: ["La masa del objeto", "La altura sobre el origen", "La aceleración de la gravedad", "La rapidez del objeto"], correctAnswerIndex: 2, explanation: "$g$ representa la magnitud de la aceleración de la gravedad, aproximadamente $9.8 \\text{ m/s}^2$ en la Tierra." },
+            { question: "¿Qué representa el cambio en la energía cinética ($\\Delta K$) según el Teorema del Trabajo y la Energía Cinética?", options: ["El trabajo de fuerzas conservativas.", "El trabajo neto (total) sobre el objeto.", "La energía potencial.", "La energía mecánica total."], correctAnswerIndex: 1, explanation: "El Teorema del Trabajo y la Energía Cinética establece que el trabajo neto ($W_{neto}$) es igual al cambio en la energía cinética: $W_{neto} = \\Delta K$." },
+            { question: "¿Cuál de las siguientes es una fuerza NO conservativa?", options: ["Fuerza de gravedad", "Fuerza elástica de un resorte", "Fuerza de rozamiento", "Fuerza eléctrica"], correctAnswerIndex: 2, explanation: "La fuerza de rozamiento (fricción) es no conservativa porque el trabajo que realiza depende de la trayectoria y disipa energía mecánica, usualmente como calor." },
+            { question: "Un objeto de 2 kg se mueve a 4 m/s. ¿Cuál es su energía cinética ($K$)?", options: ["4 J", "8 J", "16 J", "32 J"], correctAnswerIndex: 2, explanation: "Usando $K = \\frac{1}{2} m v^2$, tenemos $K = \\frac{1}{2} (2 \\text{ kg}) (4 \\text{ m/s})^2 = 16 \\text{ J.}$" },
+            { question: "Un libro de 1 kg se levanta 2 m. Si $g \\approx 9.8 \\text{ m/s}^2$, ¿cuál es su energía potencial gravitatoria ($U$) respecto al suelo?", options: ["4.9 J", "9.8 J", "19.6 J", "39.2 J"], correctAnswerIndex: 2, explanation: "Usando $U = mgh$, tenemos $U = (1 \\text{ kg}) (9.8 \\text{ m/s}^2) (2 \\text{ m}) = 19.6 \\text{ J.}$" },
+            { question: "Si la energía mecánica de un sistema disminuye, ¿qué ha ocurrido?", options: ["Se ha creado energía.", "Han actuado fuerzas conservativas.", "Han actuado fuerzas no conservativas.", "La energía se ha transformado completamente en calor."], correctAnswerIndex: 2, explanation: "Cuando actúan fuerzas no conservativas (como la fricción), realizan un trabajo negativo ($W_{nc} = \\Delta E_m < 0$), lo que resulta en una disminución de la energía mecánica del sistema." }
+        ];
+        const default_questions_newton_laws = [
+            { question: "¿Qué ley de Newton afirma que un objeto en reposo tiende a permanecer en reposo?", options: ["Primera Ley de Newton (Inercia)", "Segunda Ley de Newton (F=ma)", "Tercera Ley de Newton (Acción-Reacción)", "Ley de Gravitación Universal"], correctAnswerIndex: 0, explanation: "Esta es la definición de la Primera Ley de Newton, también conocida como Ley de la Inercia." },
+            { question: "La Segunda Ley de Newton se expresa matemáticamente como:", options: ["$\\vec{F} = m \\cdot \\vec{a}$", "$\\vec{F}_{12} = -\\vec{F}_{21}$", "$\\sum \\vec{F} = 0$", "$E_k = \\frac{1}{2} m v^2$"], correctAnswerIndex: 0, explanation: "La Segunda Ley de Newton establece que la fuerza neta ($\vec{F}$) que actúa sobre un objeto es igual al producto de su masa ($m$) y su aceleración ($\vec{a}$)." },
+            { question: "Si empujas una pared con una fuerza de 10 N, ¿cuál es la fuerza que la pared ejerce sobre ti?", options: ["10 N en la misma dirección.", "10 N en dirección opuesta.", "Menos de 10 N.", "Cero, porque la pared no se mueve."], correctAnswerIndex: 1, explanation: "Según la Tercera Ley de Newton (Acción-Reacción), por cada acción hay una reacción igual y opuesta. La pared te empuja con 10 N en dirección opuesta." },
+            { question: "¿Qué magnitud mide la inercia de un objeto?", options: ["Peso", "Velocidad", "Aceleración", "Masa"], correctAnswerIndex: 3, explanation: "La masa de un objeto es una medida de su inercia, es decir, su resistencia a cambiar su estado de movimiento." },
+            { question: "Un objeto está en equilibrio si:", options: ["Está en reposo únicamente.", "Se mueve con velocidad constante y aceleración no nula.", "La suma de todas las fuerzas que actúan sobre él es cero.", "Solo actúan fuerzas de fricción."], correctAnswerIndex: 2, explanation: "Un objeto está en equilibrio si la fuerza neta que actúa sobre él es cero, lo que implica que está en reposo o se mueve con velocidad constante (Primera Ley de Newton)." },
+            { question: "Un astronauta flota en el espacio lejos de cualquier planeta. Si lanza una herramienta, ¿qué le ocurre al astronauta?", options: ["Se mantiene en su lugar.", "Se mueve en la misma dirección que la herramienta.", "Se mueve en dirección opuesta a la herramienta.", "Acelera indefinidamente."], correctAnswerIndex: 2, explanation: "Según la Tercera Ley de Newton, al lanzar la herramienta, el astronauta ejerce una fuerza sobre ella, y la herramienta ejerce una fuerza igual y opuesta sobre el astronauta, causando que este se mueva en dirección contraria." }
+        ];
+        const default_questions_kinematics = [
+            { question: "En un Movimiento Rectilíneo Uniforme (MRU), ¿cómo es la aceleración del objeto?", options: ["Constante y diferente de cero.", "Variable.", "Siempre cero.", "Aumenta con el tiempo."], correctAnswerIndex: 2, explanation: "En el MRU, la velocidad es constante, lo que implica que la aceleración es siempre cero." },
+            { question: "¿Cuál de las siguientes es una característica principal del Movimiento Rectilíneo Uniformemente Variado (MRUV)?", options: ["Velocidad constante.", "Aceleración nula.", "Aceleración constante y diferente de cero.", "Trayectoria curva."], correctAnswerIndex: 2, explanation: "El MRUV se define por tener una aceleración constante, lo que provoca que la velocidad del objeto cambie uniformemente." },
+            { question: "En la caída libre, si se desprecia la resistencia del aire, ¿cómo es la aceleración de todos los objetos?", options: ["Depende de la masa del objeto.", "Aumenta a medida que cae.", "Es constante e igual a $g$.", "Es cero."], correctAnswerIndex: 2, explanation: "En caída libre ideal, la aceleración de todos los objetos es la misma: la aceleración de la gravedad ($g$), aproximadamente $9.8 \\text{ m/s}^2$ hacia abajo." },
+            { question: "Si un objeto se lanza verticalmente hacia arriba, ¿cuál es su velocidad en el punto más alto de su trayectoria?", options: ["Máxima.", "Igual a su velocidad inicial.", "Cero.", "Igual a $g$."], correctAnswerIndex: 2, explanation: "En el punto más alto de un tiro vertical, el objeto se detiene momentáneamente antes de invertir su dirección, por lo que su velocidad es cero." },
+            { question: "La trayectoria de un proyectil (sin resistencia del aire) lanzado en un ángulo es:", options: ["Una línea recta.", "Un círculo.", "Una parábola.", "Una espiral."], correctAnswerIndex: 2, explanation: "El movimiento de un proyectil es la combinación de un MRU horizontal y un MRUV vertical (caída libre), lo que resulta en una trayectoria parabólica." }
+        ];
 
-        let currentQuestionIndex = -1, score = 0, currentGameId = null, currentPlayerId = null, isHost = false;
-        let shuffledQuestions = [], timerInterval, timeLeft = 15;
+        let shuffledQuestions = [], customQuestions = [], currentQuestionIndex = -1, score = 0, timerInterval;
+        let gameListener = null, playersListener = null;
+        let currentGameId = null, currentPlayerId = null, isHost = false, currentTopic = null;
+        const TIME_AFTER_ANSWER = 5000, TIME_PER_QUESTION = 15, BASE_SCORE = 1000, MAX_BONUS = 500;
+        let timeLeft = TIME_PER_QUESTION;
 
-        function showScreen(id) {
-            document.querySelectorAll('.game-screen').forEach(s => s.classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
+        const allScreens = document.querySelectorAll('.game-screen');
+        const TOPIC_KEYS = {'work_energy': 'work_energy_questions','newton_laws': 'newton_laws_questions', 'kinematics': 'kinematics_questions'};
+        const TOPIC_NAMES = {'work_energy_questions': 'Trabajo y Energía','newton_laws_questions': 'Leyes de Newton','kinematics_questions': 'Cinemática'};
+        
+        const CUSTOM_SETS_STORAGE_KEY = 'customGameSets_v1';
+        let savedCustomGameSets = [];
+        let editingCustomSetIndex = -1;
+        let editingIndividualCustomQuestionIndex = -1;
+
+        function showScreen(id) { 
+            allScreens.forEach(s => s.classList.add('hidden')); 
+            document.getElementById(id).classList.remove('hidden'); 
         }
 
-        function restartGame() {
-            score = 0; currentQuestionIndex = -1;
+        function resetGameState() {
+            score = 0; currentQuestionIndex = -1; shuffledQuestions = []; customQuestions = [];
+            currentGameId = null; currentPlayerId = null; isHost = false; currentTopic = null;
+            if (gameListener) gameListener(); if (playersListener) playersListener();
+            gameListener = null; playersListener = null; clearInterval(timerInterval);
+            document.getElementById('endGameButton').classList.add('hidden');
+            editingCustomSetIndex = -1;
+            editingIndividualCustomQuestionIndex = -1;
+            document.getElementById('editingCustomQuestionIndex').value = "-1";
+            document.getElementById('customGameSetName').value = '';
+            document.getElementById('customHostName').value = '';
+            clearCustomQuestionFormFields();
+            document.getElementById('csvFileInputCustom').value = "";
+            document.getElementById('csvFileInputAdmin').value = "";
+        }
+
+        function restartGame() { resetGameState(); showScreen('welcomeScreen'); sound.playClick(); }
+
+        function loadQuestions(topicKey) {
+            const fromStorage = localStorage.getItem(topicKey);
+            if (fromStorage) { try { return JSON.parse(fromStorage); } catch(e){ console.error("Error parsing questions from localStorage", e); } }
+            if (topicKey === TOPIC_KEYS.work_energy) return default_questions_work_energy;
+            if (topicKey === TOPIC_KEYS.newton_laws) return default_questions_newton_laws;
+            if (topicKey === TOPIC_KEYS.kinematics) return default_questions_kinematics;
+            return [];
+        }
+
+        // --- DIÁLOGOS MODALES CSS ---
+        function customAlert(message, title = "Información") {
+            sound.playClick();
+            return new Promise((resolve) => {
+                const container = document.getElementById('customDialogContainer');
+                const titleEl = document.getElementById('customDialogTitle');
+                const messageEl = document.getElementById('customDialogMessage');
+                const btnOk = document.getElementById('customDialogOk');
+                const btnCancel = document.getElementById('customDialogCancel');
+                const icon = document.getElementById('customDialogIcon');
+
+                titleEl.textContent = title;
+                messageEl.textContent = message;
+                btnCancel.classList.add('hidden');
+                
+                icon.setAttribute('data-lucide', 'info');
+                lucide.createIcons();
+
+                container.classList.remove('hidden');
+                container.classList.add('flex');
+
+                btnOk.onclick = () => {
+                    container.classList.add('hidden');
+                    container.classList.remove('flex');
+                    resolve(true);
+                };
+            });
+        }
+
+        function showConfirm(message, title = "Confirmación") {
+            sound.playClick();
+            return new Promise((resolve) => {
+                const container = document.getElementById('customDialogContainer');
+                const titleEl = document.getElementById('customDialogTitle');
+                const messageEl = document.getElementById('customDialogMessage');
+                const btnOk = document.getElementById('customDialogOk');
+                const btnCancel = document.getElementById('customDialogCancel');
+                const icon = document.getElementById('customDialogIcon');
+
+                titleEl.textContent = title;
+                messageEl.textContent = message;
+                btnCancel.classList.remove('hidden');
+                
+                icon.setAttribute('data-lucide', 'help-circle');
+                lucide.createIcons();
+
+                container.classList.remove('hidden');
+                container.classList.add('flex');
+
+                btnOk.onclick = () => {
+                    container.classList.add('hidden');
+                    container.classList.remove('flex');
+                    resolve(true);
+                };
+
+                btnCancel.onclick = () => {
+                    container.classList.add('hidden');
+                    container.classList.remove('flex');
+                    resolve(false);
+                };
+            });
+        }
+
+        // --- AUDIO ENGINE ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        let soundMuted = false;
+
+        function getAudioContext() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        const sound = {
+            playClick: () => {
+                if (soundMuted) return;
+                try {
+                    const ctx = getAudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(); osc.stop(ctx.currentTime + 0.09);
+                } catch (e) {}
+            },
+            playCorrect: () => {
+                if (soundMuted) return;
+                try {
+                    const ctx = getAudioContext();
+                    const now = ctx.currentTime;
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                        gain.gain.setValueAtTime(0.12, now + idx * 0.06);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.2);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.06); osc.stop(now + idx * 0.06 + 0.22);
+                    });
+                } catch (e) {}
+            },
+            playIncorrect: () => {
+                if (soundMuted) return;
+                try {
+                    const ctx = getAudioContext();
+                    const now = ctx.currentTime;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(90, now + 0.4);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'lowpass'; filter.frequency.setValueAtTime(300, now);
+                    osc.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+                    osc.start(); osc.stop(now + 0.42);
+                } catch (e) {}
+            },
+            playTick: () => {
+                if (soundMuted) return;
+                try {
+                    const ctx = getAudioContext();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(850, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(); osc.stop(ctx.currentTime + 0.05);
+                } catch (e) {}
+            },
+            playVictory: () => {
+                if (soundMuted) return;
+                try {
+                    const ctx = getAudioContext();
+                    const now = ctx.currentTime;
+                    const chord = [329.63, 392.00, 523.25, 659.25];
+                    chord.forEach((freq) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(freq, now);
+                        osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + 0.7);
+                        gain.gain.setValueAtTime(0.06, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(); osc.stop(now + 0.75);
+                    });
+                } catch (e) {}
+            }
+        };
+
+        function toggleMute() {
+            soundMuted = !soundMuted;
+            const icon = document.getElementById('soundIcon');
+            const text = document.getElementById('soundText');
+            if (soundMuted) {
+                icon.setAttribute('data-lucide', 'volume-x');
+                text.textContent = "Silenciado";
+            } else {
+                icon.setAttribute('data-lucide', 'volume-2');
+                text.textContent = "Sonido Activo";
+                sound.playClick();
+            }
+            lucide.createIcons();
+        }
+
+        // --- JUGAR EN SOLITARIO ---
+        async function startGame(topicShortKey) {
+            resetGameState();
+            isHost = false;
+            const numQuestions = parseInt(document.getElementById('spNumQuestions').value);
+            if(isNaN(numQuestions) || numQuestions < 1 || numQuestions > 20) { 
+                await customAlert("Elige un número de preguntas entre 1 y 20.", "Configuración Inválida"); 
+                return; 
+            }
+            const questions = loadQuestions(TOPIC_KEYS[topicShortKey]);
+            if (questions.length < numQuestions) { 
+                await customAlert(`No hay suficientes preguntas (${questions.length}) para este tema.`, "Falta de Preguntas"); 
+                return; 
+            }
+            shuffledQuestions = [...questions].sort(() => 0.5 - Math.random()).slice(0, numQuestions);
+            currentQuestionIndex = 0;
+            document.getElementById('endGameButton').classList.remove('hidden');
+            showScreen('questionScreen'); 
+            loadSinglePlayerQuestion();
+        }
+
+        function loadSinglePlayerQuestion() {
+            if (currentQuestionIndex >= shuffledQuestions.length) { endGame(); return; }
+            const q = shuffledQuestions[currentQuestionIndex];
+            
+            document.getElementById('feedback').innerHTML = ''; 
+            document.getElementById('explanationContainer').classList.add('hidden');
+            document.getElementById('questionText').innerHTML = q.question; 
+            MathJax.typesetPromise();
+
+            const buttons = document.querySelectorAll('.answer-button');
+            buttons.forEach((btn, i) => {
+                btn.innerHTML = q.options[i]; 
+                btn.onclick = () => handleSinglePlayerAnswer(i);
+                btn.disabled = false; 
+                btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 btn-3d-option rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full";
+            });
+            
+            MathJax.typesetPromise();
+            document.getElementById('progressText').textContent = `Pregunta ${currentQuestionIndex + 1} de ${shuffledQuestions.length}`;
+            startTimer(loadNextSinglePlayerQuestion);
+        }
+
+        function handleSinglePlayerAnswer(selectedIndex) {
+            clearInterval(timerInterval); 
+            disableButtons();
+            const q = shuffledQuestions[currentQuestionIndex];
+            const isCorrect = selectedIndex === q.correctAnswerIndex;
+            const feedback = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                const bonus = Math.round(MAX_BONUS * (timeLeft / TIME_PER_QUESTION));
+                score += BASE_SCORE + bonus;
+                feedback.innerHTML = `<span class="text-emerald-450 font-bold">¡Correcto! +${BASE_SCORE + bonus} pts</span>`;
+                sound.playCorrect();
+            } else { 
+                feedback.innerHTML = selectedIndex !== null ? '<span class="text-rose-450 font-bold">¡Incorrecto!</span>' : '<span class="text-rose-455 font-bold">¡Tiempo agotado!</span>'; 
+                sound.playIncorrect();
+            }
+            
+            document.getElementById('currentScoreDisplay').textContent = `Puntuación: ${score}`;
+            
+            const buttons = document.querySelectorAll('.answer-button');
+            buttons.forEach((btn, i) => { 
+                if (i === q.correctAnswerIndex) {
+                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-bold py-4 px-6 btn-3d-correct rounded-2xl flex items-center justify-center text-center math-container w-full";
+                } else if (selectedIndex === i) {
+                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-bold py-4 px-6 btn-3d-incorrect rounded-2xl flex items-center justify-center text-center math-container w-full";
+                } else {
+                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 btn-3d-disabled-neutral rounded-2xl flex items-center justify-center text-center math-container w-full";
+                }
+            });
+
+            document.getElementById('explanation').innerHTML = q.explanation; 
+            document.getElementById('explanationContainer').classList.remove('hidden');
+            MathJax.typesetPromise();
+            
+            setTimeout(loadNextSinglePlayerQuestion, TIME_AFTER_ANSWER);
+        }
+
+        function loadNextSinglePlayerQuestion() { currentQuestionIndex++; loadSinglePlayerQuestion(); }
+
+        // --- CONFIGURAR MULTIJUGADOR ---
+        function showHostSetup(topic) { 
+            resetGameState(); 
+            currentTopic = topic; 
+            isHost = true; 
+            showScreen('hostSetupScreen'); 
+            document.getElementById('createGameButton').onclick = createStandardMultiplayerGame; 
+            sound.playClick();
+        }
+
+        async function createStandardMultiplayerGame() {
+            const hostName = document.getElementById('hostNameInput').value.trim();
+            const numQuestions = parseInt(document.getElementById('mpNumQuestions').value);
+            const msgEl = document.getElementById('hostSetupMessage');
+            msgEl.textContent = "";
+
+            if (!hostName) { msgEl.textContent = "Introduce tu nombre de anfitrión."; return; }
+            if(isNaN(numQuestions) || numQuestions < 1 || numQuestions > 20) { msgEl.textContent = "Elige un número de preguntas entre 1 y 20."; return; }
+            
+            const questions = loadQuestions(TOPIC_KEYS[currentTopic]);
+            if(questions.length < numQuestions) { 
+                await customAlert(`No hay suficientes preguntas (${questions.length}) en este tema.`, "Falta de Preguntas"); 
+                return; 
+            }
+            shuffledQuestions = [...questions].sort(() => 0.5 - Math.random()).slice(0, numQuestions);
+            await createGameInFirestore(hostName, shuffledQuestions, currentTopic);
+        }
+
+        // --- PARTIDAS PERSONALIZADAS ---
+        function showCustomGameSetup() {
+            resetGameState(); 
+            isHost = true;
+            loadSavedCustomGameSetsFromStorage();
+            displaySavedCustomSetsList();
+            document.getElementById('customGameCreationArea').classList.add('hidden'); 
+            showScreen('customGameSetupScreen');
+            sound.playClick();
+        }
+
+        function prepareNewCustomSetForm() {
+            editingCustomSetIndex = -1;
+            document.getElementById('customGameSetName').value = '';
+            customQuestions = [];
+            displayCustomQuestionsList();
+            clearCustomQuestionFormFields();
+            document.getElementById('customGameCreationArea').classList.remove('hidden');
+            document.getElementById('saveAndCreateCustomGameButton').textContent = 'Guardar y Crear Partida';
+            sound.playClick();
+        }
+        
+        function clearCustomQuestionFormFields() {
+            document.getElementById('customQText').value = '';
+            document.getElementById('customOpt0').value = '';
+            document.getElementById('customOpt1').value = '';
+            document.getElementById('customOpt2').value = '';
+            document.getElementById('customOpt3').value = '';
+            document.getElementById('customCorrectIndex').value = '0';
+            document.getElementById('customExplanationText').value = '';
+            document.getElementById('editingCustomQuestionIndex').value = "-1";
+            editingIndividualCustomQuestionIndex = -1;
+        }
+
+        function addCustomQuestion() {
+            const qText = document.getElementById('customQText').value.trim();
+            const opt0 = document.getElementById('customOpt0').value.trim();
+            const opt1 = document.getElementById('customOpt1').value.trim();
+            const opt2 = document.getElementById('customOpt2').value.trim();
+            const opt3 = document.getElementById('customOpt3').value.trim();
+            const correctIdx = parseInt(document.getElementById('customCorrectIndex').value);
+            const explanation = document.getElementById('customExplanationText').value.trim();
+
+            if (!qText || !opt0 || !opt1 || !opt2 || !opt3) { 
+                customAlert("Rellena la pregunta y todas las opciones requeridas.", "Formulario Incompleto"); 
+                return; 
+            }
+
+            const q = {
+                question: qText,
+                options: [opt0, opt1, opt2, opt3],
+                correctAnswerIndex: correctIdx,
+                explanation: explanation
+            };
+
+            const editIdx = parseInt(document.getElementById('editingCustomQuestionIndex').value);
+            if (editIdx > -1) {
+                customQuestions[editIdx] = q;
+            } else {
+                customQuestions.push(q);
+            }
+            displayCustomQuestionsList();
+            clearCustomQuestionFormFields();
+            sound.playClick();
+        }
+
+        function displayCustomQuestionsList() {
+            const list = document.getElementById('customQuestionsList'); 
+            list.innerHTML = '';
+            customQuestions.forEach((q, i) => { 
+                const li = document.createElement('li'); 
+                li.className = "flex items-center justify-between gap-4 p-3 bg-slate-900 border border-slate-850 rounded-xl text-xs text-white";
+                li.innerHTML = `
+                    <span class="truncate font-semibold flex-1">${i+1}. ${q.question}</span> 
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button class="bg-indigo-600 hover:bg-indigo-500 p-2 rounded-lg transition" onclick="editIndividualCustomQuestion(${i})">
+                            <i data-lucide="edit" class="w-3.5 h-3.5 text-white"></i>
+                        </button>
+                        <button class="bg-rose-600 hover:bg-rose-550 p-2 rounded-lg transition" onclick="deleteIndividualCustomQuestion(${i})">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-white"></i>
+                        </button>
+                    </div>`; 
+                list.appendChild(li); 
+            });
+            lucide.createIcons();
+        }
+        
+        function editIndividualCustomQuestion(index) {
+            const q = customQuestions[index];
+            document.getElementById('customQText').value = q.question;
+            document.getElementById('customOpt0').value = q.options[0];
+            document.getElementById('customOpt1').value = q.options[1];
+            document.getElementById('customOpt2').value = q.options[2];
+            document.getElementById('customOpt3').value = q.options[3];
+            document.getElementById('customCorrectIndex').value = q.correctAnswerIndex;
+            document.getElementById('customExplanationText').value = q.explanation;
+            document.getElementById('editingCustomQuestionIndex').value = index;
+            sound.playClick();
+        }
+
+        async function deleteIndividualCustomQuestion(index) {
+            if (await showConfirm(`¿Eliminar la pregunta ${index + 1} de esta configuración?`, "Eliminar Pregunta")) {
+                customQuestions.splice(index, 1);
+                displayCustomQuestionsList();
+                if (parseInt(document.getElementById('editingCustomQuestionIndex').value) === index) {
+                    clearCustomQuestionFormFields();
+                }
+            }
+        }
+
+        function loadSavedCustomGameSetsFromStorage() {
+            const storedSets = localStorage.getItem(CUSTOM_SETS_STORAGE_KEY);
+            savedCustomGameSets = storedSets ? JSON.parse(storedSets) : [];
+        }
+
+        function saveCustomGameSetsToStorage() {
+            localStorage.setItem(CUSTOM_SETS_STORAGE_KEY, JSON.stringify(savedCustomGameSets));
+        }
+
+        function displaySavedCustomSetsList() {
+            const listElement = document.getElementById('savedCustomSetsListUL');
+            listElement.innerHTML = '';
+            if (savedCustomGameSets.length === 0) {
+                listElement.innerHTML = '<li class="text-xs text-slate-400 italic text-center py-4">No tienes colecciones personalizadas guardadas localmente.</li>';
+                return;
+            }
+            savedCustomGameSets.forEach((set, index) => {
+                const li = document.createElement('li');
+                li.className = "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-slate-900/60 border border-slate-900 rounded-xl transition";
+                li.innerHTML = `
+                    <div class="flex-1 min-w-0">
+                        <span class="block font-bold text-sm text-white truncate">${set.name}</span>
+                        <span class="text-[10px] text-slate-450 block">${set.questions.length} preguntas de física</span>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+                        <button class="bg-emerald-655 hover:bg-emerald-600 border border-emerald-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition" onclick="useSavedCustomSet(${index})">Usar</button>
+                        <button class="bg-indigo-655 hover:bg-indigo-600 border border-indigo-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition" onclick="editSavedCustomSet(${index})">Editar</button>
+                        <button class="bg-rose-655 hover:bg-rose-600 border border-rose-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition" onclick="deleteSavedCustomSet(${index})">Eliminar</button>
+                    </div>
+                `;
+                listElement.appendChild(li);
+            });
+        }
+        
+        function useSavedCustomSet(index) {
+            const hostName = prompt("Introduce tu nombre de Host para esta partida:", document.getElementById('customHostName').value || "Anfitrión");
+            if (!hostName) return;
+
+            const set = savedCustomGameSets[index];
+            shuffledQuestions = [...set.questions];
+            if (shuffledQuestions.length === 0) {
+                customAlert("Esta partida personalizada no tiene preguntas.", "Colección Vacía");
+                return;
+            }
+            document.getElementById('customHostName').value = hostName;
+            createGameInFirestore(hostName, shuffledQuestions, `custom_${set.name.replace(/\s+/g, '_')}`);
+        }
+
+        function editSavedCustomSet(index) {
+            editingCustomSetIndex = index;
+            const set = savedCustomGameSets[index];
+            document.getElementById('customGameSetName').value = set.name;
+            customQuestions = JSON.parse(JSON.stringify(set.questions));
+            displayCustomQuestionsList();
+            document.getElementById('customGameCreationArea').classList.remove('hidden');
+            document.getElementById('saveAndCreateCustomGameButton').textContent = 'Actualizar y Crear Partida';
+            clearCustomQuestionFormFields();
+            sound.playClick();
+        }
+
+        async function deleteSavedCustomSet(index) {
+            const setName = savedCustomGameSets[index].name;
+            if (await showConfirm(`¿Estás seguro de que quieres eliminar la partida personalizada "${setName}"?`, "Confirmar Borrado")) {
+                savedCustomGameSets.splice(index, 1);
+                saveCustomGameSetsToStorage();
+                displaySavedCustomSetsList();
+                if (editingCustomSetIndex === index) {
+                    prepareNewCustomSetForm();
+                    document.getElementById('customGameCreationArea').classList.add('hidden');
+                }
+            }
+        }
+        
+        function saveCurrentCustomSetConfiguration() {
+            const setName = document.getElementById('customGameSetName').value.trim();
+            const msgEl = document.getElementById('customGameMessage');
+            msgEl.textContent = '';
+
+            if (!setName) { 
+                msgEl.className = "text-sm font-bold text-rose-455 text-center min-h-[1.25rem]";
+                msgEl.textContent = "Dale un nombre a tu configuración de partida."; 
+                return false; 
+            }
+            if (customQuestions.length === 0) { 
+                msgEl.className = "text-sm font-bold text-rose-455 text-center min-h-[1.25rem]";
+                msgEl.textContent = "Añade al menos una pregunta a la configuración."; 
+                return false; 
+            }
+
+            const newSet = { name: setName, questions: JSON.parse(JSON.stringify(customQuestions)) };
+
+            if (editingCustomSetIndex > -1) {
+                savedCustomGameSets[editingCustomSetIndex] = newSet;
+            } else {
+                const existingSetIndex = savedCustomGameSets.findIndex(s => s.name === setName);
+                if (existingSetIndex > -1) {
+                    msgEl.className = "text-sm font-bold text-rose-455 text-center min-h-[1.25rem]";
+                    msgEl.textContent = "Ya existe una colección con este nombre localmente.";
+                    return false;
+                } else {
+                   savedCustomGameSets.push(newSet);
+                   editingCustomSetIndex = savedCustomGameSets.length - 1;
+                }
+            }
+            saveCustomGameSetsToStorage();
+            displaySavedCustomSetsList();
+            msgEl.className = "text-sm font-bold text-emerald-450 text-center min-h-[1.25rem]";
+            msgEl.textContent = `¡Colección "${setName}" guardada!`;
+            setTimeout(() => msgEl.textContent = '', 3000);
+            return true;
+        }
+
+        function saveCustomSetChangesOnly() {
+            saveCurrentCustomSetConfiguration();
+        }
+
+        async function saveAndCreateCustomMultiplayerGame() {
+            if (!saveCurrentCustomSetConfiguration()) return;
+
+            const hostName = document.getElementById('customHostName').value.trim();
+            const msgEl = document.getElementById('customGameMessage');
+
+            if (!hostName) { 
+                msgEl.className = "text-sm font-bold text-rose-455 text-center min-h-[1.25rem]";
+                msgEl.textContent = "Introduce tu nombre de Host."; 
+                return; 
+            }
+            shuffledQuestions = JSON.parse(JSON.stringify(customQuestions)); 
+            
+            if (shuffledQuestions.length === 0) {
+                msgEl.className = "text-sm font-bold text-rose-455 text-center min-h-[1.25rem]";
+                msgEl.textContent = "Debes añadir al menos una pregunta."; 
+                return;
+            }
+            const setNameForTopic = document.getElementById('customGameSetName').value.trim().replace(/\s+/g, '_');
+            await createGameInFirestore(hostName, shuffledQuestions, `custom_${setNameForTopic}`);
+        }
+
+        // --- SISTEMA MULTIJUGADOR DESDE FIRESTORE ---
+        async function createGameInFirestore(hostName, questionsToUse, topicIdentifier) {
+            const pin = Math.floor(100000 + Math.random() * 900000).toString();
+            try {
+                const gameRef = await db.collection('games').add({ pin, status: 'lobby', currentQuestionIndex: -1, topic: topicIdentifier, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                currentGameId = gameRef.id;
+                const playerRef = await db.collection('games').doc(currentGameId).collection('players').add({ name: hostName, score: 0 });
+                currentPlayerId = playerRef.id;
+                const batch = db.batch();
+                questionsToUse.forEach((q, i) => batch.set(db.collection('games').doc(currentGameId).collection('questions').doc(String(i)), q));
+                await batch.commit();
+                
+                shuffledQuestions = JSON.parse(JSON.stringify(questionsToUse)); 
+                showHostLobby(currentGameId, pin);
+            } catch (e) { 
+                console.error("Error al crear partida:", e); 
+                customAlert("No se pudo crear la partida en Firestore.", "Error del Servidor"); 
+            }
+        }
+
+        function showHostLobby(gameId, pin) {
+            showScreen('lobbyScreen');
+            document.getElementById('lobbyPin').textContent = pin;
+            const qrContainer = document.getElementById('qrCodeContainer');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, { text: pin, width: 110, height: 110 });
+            
+            playersListener = db.collection('games').doc(gameId).collection('players').onSnapshot(snap => {
+                const list = document.getElementById('lobbyPlayersList');
+                list.innerHTML = '';
+                document.getElementById('playerCountDisplay').textContent = snap.size;
+                snap.forEach(doc => { 
+                    const p = doc.data();
+                    const li = document.createElement('li'); 
+                    const initial = p.name.charAt(0).toUpperCase();
+                    li.className = "flex items-center gap-2.5 p-3.5 bg-slate-900/60 border border-slate-900 rounded-xl text-sm font-semibold text-white transition hover:bg-slate-900/90";
+                    li.innerHTML = `
+                        <div class="w-8 h-8 rounded-full bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-xs shrink-0">${initial}</div>
+                        <span class="truncate">${p.name}</span>
+                    `;
+                    list.appendChild(li); 
+                });
+            });
+        }
+
+        async function cancelGame() {
+            if (isHost && currentGameId) {
+                await db.collection('games').doc(currentGameId).delete().catch(e => console.error("Error al borrar partida:", e));
+            }
+            restartGame();
+        }
+
+        function showJoinScreen() { resetGameState(); showScreen('joinScreen'); sound.playClick(); }
+
+        async function joinGame() {
+            const playerName = document.getElementById('playerNameInput').value.trim();
+            const pin = document.getElementById('pinInput').value.trim();
+            const msg = document.getElementById('joinMessage');
+            msg.textContent = "";
+
+            if (!playerName || !pin) { msg.textContent = "Introduce tu nombre y el PIN de acceso."; return; }
+            try {
+                const snap = await db.collection('games').where('pin', '==', pin).where('status', '==', 'lobby').get();
+                if (snap.empty) { msg.textContent = "PIN no válido o la partida ya comenzó."; return; }
+                currentGameId = snap.docs[0].id;
+                
+                const questionsSnap = await db.collection('games').doc(currentGameId).collection('questions').get();
+                shuffledQuestions = Array(questionsSnap.size).fill(null);
+                
+                const playerRef = await db.collection('games').doc(currentGameId).collection('players').add({ name: playerName, score: 0 });
+                currentPlayerId = playerRef.id;
+                isHost = false;
+                showPlayerWaitingRoom(pin);
+            } catch (e) { 
+                console.error("Error al unirse:", e); 
+                msg.textContent = "Ocurrió un error al intentar conectarse."; 
+            }
+        }
+
+        function showPlayerWaitingRoom(pin) {
+            showScreen('playerWaitingScreen');
+            document.getElementById('waitingForPin').textContent = pin;
+            listenForGameChanges();
+        }
+
+        async function startMultiplayerGame() {
+            if (!currentGameId || !isHost) return;
+            listenForGameChanges();
+            await db.collection('games').doc(currentGameId).update({ status: 'in-progress', currentQuestionIndex: 0 });
+        }
+
+        function listenForGameChanges() {
+            if (!currentGameId) return;
+            if (gameListener) gameListener();
+            gameListener = db.collection('games').doc(currentGameId).onSnapshot(doc => {
+                if (!doc.exists) { 
+                    if (!isHost) customAlert("La partida ha sido cancelada por el anfitrión.", "Partida Finalizada"); 
+                    restartGame(); 
+                    return; 
+                }
+                const gameData = doc.data();
+                if (gameData.status === 'finished') {
+                    showEndScreen();
+                    return;
+                }
+                if (gameData.currentQuestionIndex !== currentQuestionIndex || (gameData.status === 'in-progress' && !document.getElementById('questionScreen').classList.contains('active'))) {
+                    if (gameData.status === 'in-progress' && gameData.currentQuestionIndex >= 0) {
+                        loadMultiplayerQuestion(gameData);
+                    }
+                }
+            });
+        }
+
+        async function loadMultiplayerQuestion(gameData) {
+            if (isHost) document.getElementById('endGameButton').classList.remove('hidden'); else document.getElementById('endGameButton').classList.add('hidden');
+            
+            currentQuestionIndex = gameData.currentQuestionIndex;
+            let q;
+
+            if (isHost) {
+                 q = shuffledQuestions[currentQuestionIndex];
+            } else {
+                 const questionDoc = await db.collection('games').doc(currentGameId).collection('questions').doc(String(currentQuestionIndex)).get();
+                 if (questionDoc.exists) {
+                    q = questionDoc.data();
+                 } else {
+                    console.error("No se pudo cargar la pregunta para el jugador.");
+                    return; 
+                 }
+            }
+
+            if (!q) { console.error("Pregunta indefinida"); return; }
+            
+            document.getElementById('feedback').innerHTML = ''; 
+            document.getElementById('explanationContainer').classList.add('hidden');
+            document.getElementById('currentScoreDisplay').textContent = `Puntuación: ${score}`;
+            showScreen('questionScreen');
+            document.getElementById('questionText').innerHTML = q.question; 
+            MathJax.typesetPromise();
+
+            const buttons = document.querySelectorAll('.answer-button');
+            buttons.forEach((btn, i) => {
+                btn.innerHTML = q.options[i];
+                btn.onclick = () => handleMultiplayerAnswer(i, q.correctAnswerIndex);
+                btn.disabled = false;
+                btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 btn-3d-option rounded-2xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full";
+                MathJax.typesetPromise();
+            });
+
+            const totalQuestions = shuffledQuestions.length > 0 ? shuffledQuestions.length : (gameData.totalQuestions || 1);
+            document.getElementById('progressText').textContent = `Pregunta ${currentQuestionIndex + 1} de ${totalQuestions}`;
+            startTimer(() => handleMultiplayerAnswer(null, q.correctAnswerIndex));
+        }
+
+        async function handleMultiplayerAnswer(selectedIndex, correctAnswerIndex) {
+            clearInterval(timerInterval); 
+            disableButtons();
+            const isCorrect = selectedIndex === correctAnswerIndex;
+            const feedback = document.getElementById('feedback');
+            let questionDataForExplanation;
+
+            if (isCorrect) {
+                const bonus = Math.round(MAX_BONUS * (timeLeft / TIME_PER_QUESTION));
+                score += BASE_SCORE + bonus;
+                feedback.innerHTML = `<span class="text-emerald-450 font-bold">¡Correcto! +${BASE_SCORE + bonus} pts</span>`;
+                sound.playCorrect();
+            } else { 
+                feedback.innerHTML = selectedIndex !== null ? '<span class="text-rose-450 font-bold">¡Incorrecto!</span>' : '<span class="text-rose-455 font-bold">¡Tiempo agotado!</span>'; 
+                sound.playIncorrect();
+            }
+            document.getElementById('currentScoreDisplay').textContent = `Puntuación: ${score}`;
+            
+            if (currentPlayerId && currentGameId) {
+                 await db.collection('games').doc(currentGameId).collection('players').doc(currentPlayerId).update({ score });
+            }
+
+            const buttons = document.querySelectorAll('.answer-button');
+            buttons.forEach((btn, i) => { 
+                if (i === correctAnswerIndex) {
+                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-bold py-4 px-6 btn-3d-correct rounded-2xl flex items-center justify-center text-center math-container w-full";
+                } else if (selectedIndex === i) {
+                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-bold py-4 px-6 btn-3d-incorrect rounded-2xl flex items-center justify-center text-center math-container w-full";
+                } else {
+                    btn.className = "answer-button min-h-[60px] text-sm sm:text-base font-semibold py-4 px-6 btn-3d-disabled-neutral rounded-2xl flex items-center justify-center text-center math-container w-full";
+                }
+            });
+            
+            if (isHost) {
+                questionDataForExplanation = shuffledQuestions[currentQuestionIndex];
+            } else {
+                const questionDoc = await db.collection('games').doc(currentGameId).collection('questions').doc(String(currentQuestionIndex)).get();
+                if(questionDoc.exists) questionDataForExplanation = questionDoc.data();
+            }
+            if (questionDataForExplanation && questionDataForExplanation.explanation) {
+                document.getElementById('explanation').innerHTML = questionDataForExplanation.explanation; 
+                document.getElementById('explanationContainer').classList.remove('hidden');
+                MathJax.typesetPromise();
+            } else {
+                document.getElementById('explanationContainer').classList.add('hidden');
+            }
+
+            if (isHost) {
+                setTimeout(async () => {
+                    const nextIdx = currentQuestionIndex + 1;
+                    if (nextIdx < shuffledQuestions.length) {
+                        await db.collection('games').doc(currentGameId).update({ currentQuestionIndex: nextIdx });
+                    } else {
+                        await db.collection('games').doc(currentGameId).update({ status: 'finished' });
+                    }
+                }, TIME_AFTER_ANSWER);
+            }
+        }
+        
+        // --- TEMPORIZADOR ---
+        function startTimer(onTimeout) { 
+            timeLeft = TIME_PER_QUESTION; 
+            updateTimerDisplay(); 
+            clearInterval(timerInterval); 
+            timerInterval = setInterval(() => { 
+                timeLeft--; 
+                updateTimerDisplay(); 
+                if (timeLeft < 0) { 
+                    clearInterval(timerInterval); 
+                    onTimeout(); 
+                } else if (timeLeft <= 3) {
+                    sound.playTick(); 
+                }
+            }, 1000); 
+        }
+
+        function updateTimerDisplay() { 
+            const p = (timeLeft / TIME_PER_QUESTION) * 100; 
+            const bar = document.getElementById('timerProgress');
+            bar.style.width = `${p}%`; 
+            bar.textContent = timeLeft >= 0 ? `${timeLeft}s` : '¡Fin!'; 
+            
+            if (timeLeft <= 5) {
+                bar.className = "h-full rounded-full transition-all duration-1000 ease-linear shadow flex items-center justify-center text-[10px] font-black text-white bg-rose-600 animate-pulse";
+            } else {
+                bar.className = "h-full rounded-full transition-all duration-1000 ease-linear shadow flex items-center justify-center text-[10px] font-black text-white bg-indigo-600";
+            }
+        }
+
+        function disableButtons() { document.querySelectorAll('.answer-button').forEach(b => b.disabled = true); }
+        
+        async function endGame() {
             clearInterval(timerInterval);
-            showScreen('welcomeScreen');
+            if (isHost && currentGameId) {
+                const gameDoc = await db.collection('games').doc(currentGameId).get();
+                if (gameDoc.exists && gameDoc.data().status !== 'finished') {
+                    await db.collection('games').doc(currentGameId).update({ status: 'finished' });
+                    return; 
+                }
+            }
+            showEndScreen();
         }
 
-        // ... (Aquí sigue el resto de la lógica de v2.2 que ya tienes) ...
-        // Se han eliminado alertas nativas por diálogos CSS y se ha integrado
-        // el parser CSV para LaTeX.
+        function showEndScreen() {
+            if(gameListener) { gameListener(); gameListener = null; }
+            showScreen('resultsScreen');
+            sound.playVictory();
 
-        function toggleMute() { /* Lógica de sonido */ }
+            if (currentGameId) {
+                document.getElementById('singlePlayerResults').classList.add('hidden'); 
+                document.getElementById('multiplayerResults').classList.remove('hidden');
+                
+                if (playersListener) playersListener();
+                playersListener = db.collection('games').doc(currentGameId).collection('players').orderBy('score', 'desc')
+                    .onSnapshot(snap => {
+                        const board = document.getElementById('leaderboard'); 
+                        board.innerHTML = '';
+                        let index = 0;
+                        snap.forEach(doc => { 
+                            index++;
+                            const p = doc.data(); 
+                            const li = document.createElement('li'); 
+                            
+                            let badgeStyle = "bg-slate-900 border-slate-850 text-slate-300";
+                            let icon = `<span class="font-bold text-xs">${index}°</span>`;
+                            if (index === 1) {
+                                badgeStyle = "bg-amber-500/10 text-amber-400 border-amber-500/30";
+                                icon = `<i data-lucide="crown" class="w-4.5 h-4.5 text-amber-400"></i>`;
+                            } else if (index === 2) {
+                                badgeStyle = "bg-slate-300/10 text-slate-300 border-slate-300/20";
+                                icon = `<i data-lucide="award" class="w-4.5 h-4.5 text-slate-300"></i>`;
+                            } else if (index === 3) {
+                                badgeStyle = "bg-amber-700/10 text-amber-600 border-amber-700/20";
+                                icon = `<i data-lucide="award" class="w-4.5 h-4.5 text-amber-600"></i>`;
+                            }
 
-        // Inicialización
+                            li.className = `flex items-center justify-between p-3.5 border rounded-xl text-sm ${badgeStyle}`;
+                            li.innerHTML = `
+                                <div class="flex items-center gap-3">
+                                    ${icon}
+                                    <span class="font-bold">${p.name}</span>
+                                </div>
+                                <span class="font-mono font-black tracking-wide">${p.score} pts</span>
+                            `; 
+                            board.appendChild(li); 
+                        });
+                        lucide.createIcons();
+                    });
+            } else {
+                document.getElementById('singlePlayerResults').classList.remove('hidden'); 
+                document.getElementById('multiplayerResults').classList.add('hidden');
+                document.getElementById('finalScore').textContent = score;
+            }
+        }
+
+        // --- PANEL DE ADMINISTRACIÓN DE PREGUNTAS ---
+        let adminQuestions = [];
+        let currentAdminTopicKey = '', editingQuestionIndex = -1;
+
+        function showAdminScreen() { resetGameState(); showScreen('adminScreen'); sound.playClick(); }
+
+        function loadQuestionsForAdmin(topicShortKey) {
+            currentAdminTopicKey = TOPIC_KEYS[topicShortKey];
+            document.getElementById('adminCurrentTopicDisplay').textContent = `Administrando: ${TOPIC_NAMES[currentAdminTopicKey]}`;
+            adminQuestions = loadQuestions(currentAdminTopicKey);
+            displayAdminQuestionsList(adminQuestions);
+            document.getElementById('adminFormSection').classList.remove('hidden');
+            document.getElementById('adminListSection').classList.remove('hidden');
+            document.getElementById('adminCSVUploadArea').classList.remove('hidden');
+            clearAdminQuestionForm();
+            sound.playClick();
+        }
+
+        function displayAdminQuestionsList(questions) {
+            const list = document.getElementById('questionsList'); 
+            list.innerHTML = '';
+            if (!questions || questions.length === 0) { 
+                list.innerHTML = '<li class="text-xs text-slate-400 italic py-2 text-center">No hay preguntas para este tema.</li>'; 
+                return; 
+            }
+            questions.forEach((q, i) => { 
+                const li = document.createElement('li'); 
+                li.className = "flex items-center justify-between gap-4 p-3 bg-slate-900 border border-slate-850 rounded-xl text-xs text-white";
+                li.innerHTML = `
+                    <span class="truncate flex-1">Q${i+1}: ${q.question}</span> 
+                    <div class="flex gap-2 shrink-0">
+                        <button class="bg-indigo-650 hover:bg-indigo-600 p-2 rounded-lg text-white" onclick="editAdminQuestion(${i})">
+                            <i data-lucide="edit" class="w-3.5 h-3.5 text-white"></i>
+                        </button>
+                        <button class="bg-rose-650 hover:bg-rose-600 p-2 rounded-lg text-white" onclick="deleteAdminQuestion(${i})">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-white"></i>
+                        </button>
+                    </div>`; 
+                list.appendChild(li); 
+            });
+            lucide.createIcons();
+        }
+
+        function clearAdminQuestionForm() {
+            document.getElementById('qText').value = ''; 
+            ['opt0','opt1','opt2','opt3'].forEach(id => document.getElementById(id).value = ''); 
+            document.getElementById('correctIndexAdmin').value = '0'; 
+            document.getElementById('explanationTextAdmin').value = ''; 
+            editingQuestionIndex = -1; 
+        }
+
+        function addOrUpdateQuestion() {
+            const question = document.getElementById('qText').value.trim();
+            const options = [
+                document.getElementById('opt0').value.trim(), 
+                document.getElementById('opt1').value.trim(), 
+                document.getElementById('opt2').value.trim(), 
+                document.getElementById('opt3').value.trim()
+            ];
+            const correctIndex = parseInt(document.getElementById('correctIndexAdmin').value);
+            const explanation = document.getElementById('explanationTextAdmin').value.trim();
+
+            if (!question || options.some(opt => !opt)) { 
+                customAlert("Pregunta y todas las opciones son requeridas.", "Formulario Incompleto"); 
+                return; 
+            }
+            
+            const q = { question, options, correctAnswerIndex: correctIndex, explanation };
+            if (editingQuestionIndex > -1) { 
+                adminQuestions[editingQuestionIndex] = q; 
+            } else { 
+                adminQuestions.push(q); 
+            }
+            displayAdminQuestionsList(adminQuestions);
+            saveCurrentQuestions();
+            clearAdminQuestionForm();
+            sound.playClick();
+        }
+
+        function editAdminQuestion(index) {
+            const q = adminQuestions[index];
+            document.getElementById('qText').value = q.question;
+            q.options.forEach((opt, i) => document.getElementById(`opt${i}`).value = opt);
+            document.getElementById('correctIndexAdmin').value = q.correctAnswerIndex;
+            document.getElementById('explanationTextAdmin').value = q.explanation;
+            editingQuestionIndex = index;
+            sound.playClick();
+        }
+
+        async function deleteAdminQuestion(index) {
+            if (await showConfirm(`¿Eliminar la pregunta ${index + 1} de este tema predefinido?`, "Eliminar Pregunta")) {
+                adminQuestions.splice(index, 1);
+                displayAdminQuestionsList(adminQuestions);
+                saveCurrentQuestions();
+            }
+        }
+
+        function saveCurrentQuestions() {
+            localStorage.setItem(currentAdminTopicKey, JSON.stringify(adminQuestions));
+            const msg = document.getElementById('adminMessage');
+            msg.textContent = '¡Cambios guardados en tu navegador para este tema!';
+            setTimeout(() => msg.textContent = '', 2000);
+        }
+
+        // --- PARSER DE CSV (EXCEL) ---
+        function downloadCSVTemplate() {
+            const headers = "Pregunta;Opcion A;Opcion B;Opcion C;Opcion D;Indice Correcto (0-3);Explicacion\n";
+            const row1 = "\"¿Cuál es la fórmula del Trabajo Mecánico?\";\"$W = Fd\\cos\\theta$\";\"$W = mgh$\";\"$W = \\frac{1}{2}mv^2$\";\"$W = F/A$\";\"0\";\"El trabajo se define como el producto de la fuerza por el desplazamiento y el coseno del ángulo entre ellos.\"\n";
+            const row2 = "\"Un cuerpo de 2 kg tiene una aceleración de $3\\text{ m/s}^2$. ¿Cuál es la fuerza neta ejercida sobre él?\";\"2 N\";\"3 N\";\"6 N\";\"5 N\";\"2\";\"Por la Segunda Ley de Newton: $F = ma = 2\\text{ kg} \\times 3\\text{ m/s}^2 = 6\\text{ N}$.\"\n";
+            
+            const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + encodeURIComponent(headers + row1 + row2);
+            const link = document.createElement("a");
+            link.setAttribute("href", csvContent);
+            link.setAttribute("download", "plantilla_preguntas_fisica.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            sound.playClick();
+        }
+
+        function parseCSV(text) {
+            let delimiter = ';';
+            const firstLine = text.split('\n')[0];
+            if (firstLine.includes(',') && !firstLine.includes(';')) {
+                delimiter = ',';
+            }
+            
+            const lines = [];
+            let row = [""];
+            let inQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                let c = text[i];
+                let next = text[i + 1];
+                if (c === '"') {
+                    if (inQuotes && next === '"') {
+                        row[row.length - 1] += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (c === delimiter && !inQuotes) {
+                    row.push("");
+                } else if ((c === '\r' || c === '\n') && !inQuotes) {
+                    if (c === '\r' && next === '\n') { i++; }
+                    lines.push(row);
+                    row = [""];
+                } else {
+                    row[row.length - 1] += c;
+                }
+            }
+            if (row.length > 1 || row[0] !== "") {
+                lines.push(row);
+            }
+            return lines;
+        }
+
+        function handleCSVUpload(event, targetContext) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const contents = e.target.result;
+                const parsedRows = parseCSV(contents);
+                
+                if (parsedRows.length < 2) {
+                    await customAlert("El archivo está vacío o no tiene el formato correcto.", "Error de Archivo");
+                    return;
+                }
+
+                let startIndex = 0;
+                const firstRow = parsedRows[0];
+                const maybeIndex = parseInt(firstRow[5]);
+                if (isNaN(maybeIndex) || maybeIndex < 0 || maybeIndex > 3) {
+                    startIndex = 1;
+                }
+
+                let loadedCount = 0;
+                let errorRows = [];
+                const tempQuestions = [];
+
+                for (let i = startIndex; i < parsedRows.length; i++) {
+                    const row = parsedRows[i];
+                    if (row.length < 6 || !row[0].trim()) {
+                        continue; 
+                    }
+
+                    const question = row[0].trim();
+                    const opt0 = row[1] ? row[1].trim() : "";
+                    const opt1 = row[2] ? row[2].trim() : "";
+                    const opt2 = row[3] ? row[3].trim() : "";
+                    const opt3 = row[4] ? row[4].trim() : "";
+                    const correctIdx = parseInt(row[5]);
+                    const explanation = row[6] ? row[6].trim() : "";
+
+                    if (!question || !opt0 || !opt1 || !opt2 || !opt3 || isNaN(correctIdx) || correctIdx < 0 || correctIdx > 3) {
+                        errorRows.push(i + 1);
+                        continue;
+                    }
+
+                    tempQuestions.push({
+                        question: question,
+                        options: [opt0, opt1, opt2, opt3],
+                        correctAnswerIndex: correctIdx,
+                        explanation: explanation
+                    });
+                    loadedCount++;
+                }
+
+                if (loadedCount === 0) {
+                    await customAlert("No se pudieron importar preguntas. Verifica que el formato e índices sean correctos.", "Importación Fallida");
+                    return;
+                }
+
+                if (targetContext === 'custom') {
+                    customQuestions = customQuestions.concat(tempQuestions);
+                    displayCustomQuestionsList();
+                    sound.playCorrect();
+                    if (errorRows.length > 0) {
+                        await customAlert(`Se importaron ${loadedCount} preguntas con éxito. Las filas [${errorRows.join(', ')}] tenían errores y fueron omitidas.`, "Carga con Advertencias");
+                    } else {
+                        await customAlert(`¡Éxito! Se han importado ${loadedCount} preguntas a tu colección personalizada.`, "Carga Completa");
+                    }
+                } else if (targetContext === 'admin') {
+                    adminQuestions = adminQuestions.concat(tempQuestions);
+                    displayAdminQuestionsList(adminQuestions);
+                    saveCurrentQuestions();
+                    sound.playCorrect();
+                    if (errorRows.length > 0) {
+                        await customAlert(`Se añadieron ${loadedCount} preguntas a este tema. Las filas [${errorRows.join(', ')}] tenían errores y fueron omitidas.`, "Carga con Advertencias");
+                    } else {
+                        await customAlert(`¡Éxito! Se han añadido ${loadedCount} preguntas al tema de forma local en tu navegador. Recuerda presionar 'Guardar Cambios del Tema'.`, "Carga Completa");
+                    }
+                }
+            };
+
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        // --- INICIALIZACIÓN ---
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
+            loadSavedCustomGameSetsFromStorage();
             restartGame();
         });
     </script>
