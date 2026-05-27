@@ -216,31 +216,10 @@
             box-shadow: 0 0px 0 #7c5a00, 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        /* --- BORDE ANIMADO ACELERADO POR HARDWARE --- */
+        /* --- BORDE DE ALTA DEFINICIÓN PREMIUM (EVITA GLITCHES DE PANTALLA) --- */
         .card-glow-border {
-            position: relative;
-        }
-        .card-glow-border::before {
-            content: '';
-            position: absolute;
-            inset: -1.5px;
-            border-radius: 24px;
-            padding: 1.5px;
-            background: linear-gradient(135deg, #6366f1, #22d3ee, #ec4899, #6366f1);
-            background-size: 300% 300%;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            z-index: 10;
-            animation: animate-border-gradient 8s linear infinite;
-            will-change: background-position;
-        }
-
-        @keyframes animate-border-gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.7), 0 0 25px 2px rgba(99, 102, 241, 0.08);
         }
 
         /* Ambient Lights fluidas y optimizadas para evitar tirones */
@@ -666,27 +645,43 @@
                 </div>
             </div>
 
-            <!-- RESULTADOS -->
-            <div id="resultsScreen" class="game-screen hidden flex-col justify-center items-center h-full w-full gap-5 relative z-20 text-center flex-grow">
-                <div class="space-y-2 shrink-0">
-                    <div class="bg-indigo-500/10 text-indigo-400 p-4 rounded-full border border-indigo-500/20 w-fit mx-auto shadow-lg">
-                        <i data-lucide="trophy" class="w-10 h-10 sm:w-12 h-12 animate-bounce"></i>
+            <!-- RESULTADOS (CON DASHBOARD Y GRÁFICO DE RENDIMIENTO CIRCULAR) -->
+            <div id="resultsScreen" class="game-screen hidden flex-col justify-center items-center h-full w-full gap-4 relative z-20 text-center flex-grow">
+                <div class="space-y-1.5 shrink-0">
+                    <div class="bg-indigo-500/10 text-indigo-400 p-3 rounded-full border border-indigo-500/20 w-fit mx-auto mb-1 shadow-lg">
+                        <i data-lucide="trophy" class="w-9 h-9 sm:w-11 sm:h-11 animate-bounce"></i>
                     </div>
-                    <h2 class="text-2xl sm:text-4xl font-black text-white">¡Misión Cumplida!</h2>
-                    <p class="text-slate-400 text-xs sm:text-base">Has completado el desafío interactivo.</p>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white">¡Misión Cumplida!</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm">Has completado el desafío interactivo.</p>
                 </div>
 
-                <div id="singlePlayerResults" class="hidden w-full max-w-sm mx-auto bg-slate-900/60 border border-slate-800 rounded-3xl p-6 text-center space-y-2 shrink-0 shadow-xl">
+                <div id="singlePlayerResults" class="hidden w-full max-w-sm mx-auto bg-slate-900/60 border border-slate-800 rounded-3xl p-5 text-center space-y-1 shrink-0 shadow-xl">
                     <span class="text-xs text-slate-400 uppercase font-bold tracking-widest">Puntuación Final</span>
-                    <div id="finalScore" class="text-5xl sm:text-6xl font-black text-amber-400 font-mono tracking-tighter">0</div>
+                    <div id="finalScore" class="text-4xl sm:text-5xl font-black text-amber-400 font-mono tracking-tighter">0</div>
                 </div>
 
-                <div id="multiplayerResults" class="hidden w-full max-w-md mx-auto flex-col flex-grow overflow-y-auto max-h-52 pr-2 custom-scroll">
-                    <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-4 space-y-3 shadow-lg h-full">
+                <div id="multiplayerResults" class="hidden w-full max-w-md mx-auto flex-col flex-grow overflow-y-auto max-h-48 pr-1.5 custom-scroll">
+                    <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-4 space-y-2.5 shadow-lg h-full">
                         <h4 class="text-xs sm:text-sm font-bold text-slate-300 flex items-center justify-center gap-1.5 uppercase tracking-widest">
                             <i data-lucide="bar-chart-2" class="w-4 h-4 text-indigo-400"></i> Ranking Global
                         </h4>
-                        <ul id="leaderboard" class="space-y-2.5 text-left w-full"></ul>
+                        <ul id="leaderboard" class="space-y-2 text-left w-full"></ul>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN DE GRÁFICO DE RENDIMIENTO DE PREGUNTAS (CON NUEVO DIAGRAMA CIRCULAR) -->
+                <div id="performanceStatsSection" class="w-full max-w-md sm:max-w-xl mx-auto bg-slate-900/40 border border-slate-800/80 rounded-3xl p-4 space-y-3 shadow-xl flex-grow flex flex-col h-1/2 min-h-[240px] max-h-[420px] overflow-hidden">
+                    <h4 class="text-xs font-bold text-indigo-300 flex items-center justify-center gap-1.5 uppercase tracking-widest border-b border-slate-800/60 pb-2">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-indigo-400 animate-pulse"></i> 
+                        Rendimiento de Partida
+                    </h4>
+                    
+                    <!-- Contenedor del Gráfico Circular Donut estilo Kahoot -->
+                    <div id="accuracyCircleChartContainer" class="shrink-0 w-full"></div>
+                    
+                    <!-- Desglose de preguntas por barras con scroll -->
+                    <div id="questionsPerformanceChart" class="space-y-2 overflow-y-auto pr-1 custom-scroll flex-grow">
+                        <!-- Se inyecta dinámicamente mediante JavaScript -->
                     </div>
                 </div>
 
@@ -870,6 +865,7 @@
         let currentGameId = null, currentPlayerId = null, isHost = false, currentTopic = null;
         const TIME_AFTER_ANSWER = 5000, TIME_PER_QUESTION = 15, BASE_SCORE = 1000, MAX_BONUS = 500;
         let timeLeft = TIME_PER_QUESTION;
+        let singlePlayerAnswers = {}; // Mantiene un mapa de las respuestas dadas en un solo jugador
 
         // Iconos y formas estilo Kahoot
         const kahootShapes = [
@@ -904,6 +900,7 @@
         function resetGameState() {
             score = 0; currentQuestionIndex = -1; shuffledQuestions = []; customQuestions = [];
             currentGameId = null; currentPlayerId = null; isHost = false; currentTopic = null;
+            singlePlayerAnswers = {}; 
             if (gameListener) gameListener(); if (playersListener) playersListener();
             gameListener = null; playersListener = null; clearInterval(timerInterval);
             document.getElementById('endGameButton').classList.add('hidden');
@@ -1165,6 +1162,62 @@
             });
         }
 
+        // --- DISEÑADOR DE GRÁFICO CIRCULAR (DONUT CHART) DE ALTA PRECISIÓN ---
+        function drawDonutChart(correct, incorrect) {
+            const total = correct + incorrect;
+            const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+            const radius = 45;
+            const circumference = 2 * Math.PI * radius; // ~282.74
+            const correctOffset = circumference - (pct / 100) * circumference;
+            
+            return `
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-5 p-4 bg-slate-950/45 rounded-2xl border border-slate-900 shadow-inner w-full mb-1">
+                    <!-- SVG Donut -->
+                    <div class="relative w-28 h-28 shrink-0 flex items-center justify-center">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                            <!-- Background track (Incorrect/Red) -->
+                            <circle 
+                                cx="60" cy="60" r="${radius}" 
+                                stroke="#f43f5e" stroke-width="10" fill="transparent" 
+                                class="opacity-30"
+                            />
+                            <!-- Correct slice (Green) overlay -->
+                            <circle 
+                                cx="60" cy="60" r="${radius}" 
+                                stroke="#10b981" stroke-width="10" fill="transparent" 
+                                stroke-dasharray="${circumference}" 
+                                stroke-dashoffset="${correctOffset}"
+                                stroke-linecap="round"
+                                class="transition-all duration-1000 ease-out"
+                            />
+                        </svg>
+                        <!-- Center info label -->
+                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                            <span class="text-xl font-black text-white leading-none">${pct}%</span>
+                            <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider mt-1">Aciertos</span>
+                        </div>
+                    </div>
+                    <!-- Legend info -->
+                    <div class="flex-grow space-y-1 text-left w-full sm:w-auto">
+                        <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Resumen de Precisión</h5>
+                        <div class="grid grid-cols-2 gap-1.5 sm:flex sm:flex-col sm:gap-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                <span class="text-xs font-bold text-slate-300">${correct} Correctas</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span>
+                                <span class="text-xs font-bold text-slate-300">${incorrect} Incorrectas</span>
+                            </div>
+                        </div>
+                        <div class="text-[9px] text-slate-500 font-bold uppercase tracking-wider border-t border-slate-900 pt-1">
+                            Total de respuestas: ${total}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         // --- JUGAR EN SOLITARIO ---
         async function startGame(topicShortKey) {
             resetGameState(); isHost = false;
@@ -1215,6 +1268,10 @@
             clearInterval(timerInterval); disableButtons();
             const q = shuffledQuestions[currentQuestionIndex];
             const isCorrect = selectedIndex === q.correctAnswerIndex;
+            
+            // Guardar respuesta del jugador localmente
+            singlePlayerAnswers[currentQuestionIndex] = isCorrect;
+            
             const feedback = document.getElementById('feedback');
             
             if (isCorrect) {
@@ -1300,7 +1357,7 @@
             removeCustomQImage();
             document.getElementById('customGameCreationArea').classList.remove('hidden');
             document.getElementById('savedCustomSetsSection').classList.add('hidden');
-            document.getElementById('saveAndCreateCustomGameButton').textContent = 'Guardar y Hostear';
+            document.getElementById('saveAndCreateCustomGameButton').textContent = 'Actualizar y Hostear';
             sound.playClick();
         }
         
@@ -1543,7 +1600,11 @@
             if (isHost) q = shuffledQuestions[currentQuestionIndex];
             else {
                  const qDoc = await db.collection('games').doc(currentGameId).collection('questions').doc(String(currentQuestionIndex)).get();
-                 if (qDoc.exists) q = qDoc.data(); else return;
+                 if (qDoc.exists) {
+                     q = qDoc.data();
+                     // Guardamos copia de seguridad local de los enunciados de las preguntas conforme avanza
+                     shuffledQuestions[currentQuestionIndex] = q;
+                 } else return;
             }
             if (!q) return;
             
@@ -1590,7 +1651,15 @@
             }
             lucide.createIcons();
             document.getElementById('currentScoreDisplay').innerHTML = `<i data-lucide="award" class="w-4 h-4"></i><span>${score} Pts</span>`; lucide.createIcons();
-            if (currentPlayerId) await db.collection('games').doc(currentGameId).collection('players').doc(currentPlayerId).update({ score });
+            
+            // Subir tanto la puntuación como el mapa de aciertos por pregunta a Firestore
+            if (currentPlayerId) {
+                const playerAnswerUpdate = { score: score };
+                playerAnswerUpdate[`answers.${currentQuestionIndex}`] = isCorrect;
+                await db.collection('games').doc(currentGameId).collection('players').doc(currentPlayerId)
+                    .update(playerAnswerUpdate)
+                    .catch(e => console.error("Error al actualizar respuestas en Firestore: ", e));
+            }
 
             const buttons = document.querySelectorAll('.answer-button');
             buttons.forEach((btn, i) => { 
@@ -1600,7 +1669,7 @@
                     if (!btn.querySelector('.answer-feedback-badge')) {
                         const checkContainer = document.createElement('div');
                         checkContainer.className = "answer-feedback-badge ml-auto bg-emerald-500 text-white w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-white shrink-0 animate-bounce";
-                        checkContainer.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i>';
+                        checkContainer.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i>';
                         btn.appendChild(checkContainer);
                     }
                 } else if (selectedIndex === i) {
@@ -1608,7 +1677,7 @@
                     if (!btn.querySelector('.answer-feedback-badge')) {
                         const crossContainer = document.createElement('div');
                         crossContainer.className = "answer-feedback-badge ml-auto bg-rose-500 text-white w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center shadow-lg border-2 border-white shrink-0";
-                        crossContainer.innerHTML = '<i data-lucide="x" class="w-4 h-4"></i>';
+                        crossContainer.innerHTML = '<i data-lucide="x" class="w-3.5 h-3.5"></i>';
                         btn.appendChild(crossContainer);
                     }
                 } else {
@@ -1658,12 +1727,131 @@
             showEndScreen();
         }
 
+        // --- RENDERIZADO DEL GRÁFICO (MODO UN JUGADOR) ---
+        function renderSinglePlayerChart() {
+            const chartContainer = document.getElementById('questionsPerformanceChart');
+            chartContainer.innerHTML = '';
+            
+            let totalCorrect = 0;
+            let totalIncorrect = 0;
+
+            shuffledQuestions.forEach((q, idx) => {
+                const wasCorrect = singlePlayerAnswers[idx] === true;
+                if (wasCorrect) totalCorrect++; else totalIncorrect++;
+
+                const correctPct = wasCorrect ? 100 : 0;
+                const incorrectPct = wasCorrect ? 0 : 100;
+                
+                const item = document.createElement('div');
+                item.className = "space-y-1.5 text-left bg-slate-950/40 p-3 rounded-2xl border border-slate-900";
+                item.innerHTML = `
+                    <div class="flex justify-between items-start gap-2">
+                        <span class="text-xs font-bold text-slate-300 line-clamp-2 leading-relaxed">Pregunta ${idx + 1}: ${q.question}</span>
+                        <span class="text-[10px] font-bold ${wasCorrect ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-rose-400 bg-rose-500/10 border-rose-500/20'} px-2 py-0.5 rounded-md border shrink-0">
+                            ${wasCorrect ? 'Acertada ✓' : 'Errada ✗'}
+                        </span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden flex shadow-inner">
+                        <div class="bg-emerald-500 h-full transition-all duration-500" style="width: ${correctPct}%;"></div>
+                        <div class="bg-rose-500 h-full transition-all duration-500" style="width: ${incorrectPct}%;"></div>
+                    </div>
+                `;
+                chartContainer.appendChild(item);
+            });
+
+            // Inyectar el nuevo gráfico circular Donut estilo Kahoot
+            const circleChartHTML = drawDonutChart(totalCorrect, totalIncorrect);
+            document.getElementById('accuracyCircleChartContainer').innerHTML = circleChartHTML;
+            
+            MathJax.typesetPromise();
+        }
+
+        // --- RENDERIZADO DEL GRÁFICO GRUPAL (MULTIJUGADOR EN FIRESTORE) ---
+        function renderMultiplayerChart(playersSnapshot) {
+            const chartContainer = document.getElementById('questionsPerformanceChart');
+            chartContainer.innerHTML = '';
+            
+            const totalQuestionsCount = shuffledQuestions.length || 1;
+            const stats = Array.from({ length: totalQuestionsCount }, () => ({ correct: 0, incorrect: 0, total: 0 }));
+            
+            let globalCorrectAnswers = 0;
+            let globalIncorrectAnswers = 0;
+
+            // Recorrer todos los jugadores para contabilizar aciertos/desaciertos globales
+            playersSnapshot.forEach(doc => {
+                const p = doc.data();
+                if (p.answers) {
+                    Object.entries(p.answers).forEach(([qIdxStr, isCorrect]) => {
+                        const qIdx = parseInt(qIdxStr);
+                        if (qIdx >= 0 && qIdx < totalQuestionsCount) {
+                            stats[qIdx].total++;
+                            if (isCorrect) {
+                                stats[qIdx].correct++;
+                                globalCorrectAnswers++;
+                            } else {
+                                stats[qIdx].incorrect++;
+                                globalIncorrectAnswers++;
+                            }
+                        }
+                    });
+                }
+            });
+            
+            shuffledQuestions.forEach((q, idx) => {
+                if (!q) return; // Evitar renderizar nulos en carga parcial
+                const s = stats[idx] || { correct: 0, incorrect: 0, total: 0 };
+                const hasAnswers = s.total > 0;
+                const correctPct = hasAnswers ? Math.round((s.correct / s.total) * 100) : 0;
+                const incorrectPct = hasAnswers ? Math.round((s.incorrect / s.total) * 100) : 0;
+                
+                const item = document.createElement('div');
+                item.className = "space-y-1.5 text-left bg-slate-950/40 p-3 rounded-2xl border border-slate-900";
+                item.innerHTML = `
+                    <div class="flex justify-between items-start gap-2">
+                        <span class="text-xs font-bold text-slate-300 line-clamp-2 leading-relaxed">Pregunta ${idx + 1}: ${q.question}</span>
+                        <span class="text-[10px] font-bold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20 shrink-0">
+                            Acierto: ${hasAnswers ? correctPct + '%' : 'N/A'}
+                        </span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden flex shadow-inner">
+                        <div class="bg-emerald-500 h-full transition-all duration-500" style="width: ${hasAnswers ? correctPct : 0}%;"></div>
+                        <div class="bg-rose-500 h-full transition-all duration-500" style="width: ${hasAnswers ? incorrectPct : 0}%;"></div>
+                        ${!hasAnswers ? '<div class="bg-slate-700 h-full w-full"></div>' : ''}
+                    </div>
+                    <div class="flex justify-between text-[9px] text-slate-400 font-semibold px-0.5">
+                        <span class="text-emerald-400">✓ ${s.correct} Correctas</span>
+                        <span class="text-rose-400">✗ ${s.incorrect} Incorrectas</span>
+                        <span>Respuestas: ${s.total}</span>
+                    </div>
+                `;
+                chartContainer.appendChild(item);
+            });
+
+            // Inyectar el nuevo gráfico circular Donut para multijugador con datos acumulados
+            const circleChartHTML = drawDonutChart(globalCorrectAnswers, globalIncorrectAnswers);
+            document.getElementById('accuracyCircleChartContainer').innerHTML = circleChartHTML;
+
+            MathJax.typesetPromise();
+        }
+
         function showEndScreen() {
             if(gameListener) { gameListener(); gameListener = null; }
             showScreen('resultsScreen'); sound.playVictory();
 
             if (currentGameId) {
                 document.getElementById('singlePlayerResults').classList.add('hidden'); document.getElementById('multiplayerResults').classList.remove('hidden');
+                
+                // Si el jugador ingresó tarde o no tiene el set de preguntas completo, lo descarga de Firestore en background
+                if (!shuffledQuestions || shuffledQuestions.length === 0 || shuffledQuestions.includes(null)) {
+                    db.collection('games').doc(currentGameId).collection('questions').get().then(snap => {
+                        const fetchedQuestions = [];
+                        snap.forEach(doc => {
+                            fetchedQuestions[parseInt(doc.id)] = doc.data();
+                        });
+                        shuffledQuestions = fetchedQuestions;
+                    }).catch(e => console.error("Error al descargar preguntas: ", e));
+                }
+
                 if (playersListener) playersListener();
                 playersListener = db.collection('games').doc(currentGameId).collection('players').orderBy('score', 'desc')
                     .onSnapshot(snap => {
@@ -1679,10 +1867,16 @@
                             board.appendChild(li); 
                         });
                         lucide.createIcons();
+                        
+                        // Renderizar gráfico multijugador grupal en base a la lista de participantes
+                        renderMultiplayerChart(snap);
                     });
             } else {
                 document.getElementById('singlePlayerResults').classList.remove('hidden'); document.getElementById('multiplayerResults').classList.add('hidden');
                 document.getElementById('finalScore').textContent = score;
+                
+                // Renderizar gráfico para modo un jugador
+                renderSinglePlayerChart();
             }
         }
 
