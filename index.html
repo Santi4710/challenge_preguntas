@@ -604,7 +604,7 @@
             <!-- PANTALLA: UNIRSE A PARTIDA (INGRESO PIN) -->
             <div id="joinScreen" class="game-screen hidden space-y-4 sm:space-y-6 relative z-20">
                 <div class="flex items-center gap-3 border-b border-slate-900 pb-3 sm:pb-4">
-                    <button onclick="restartGame()" class="text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <button onclick="restartGame()" class="text-slate-405 hover:text-white transition"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
                     <h2 class="text-xl sm:text-2xl font-extrabold text-white">Unirse a una Partida</h2>
                 </div>
 
@@ -633,7 +633,7 @@
 
                     <div class="flex gap-3 pt-1 sm:pt-2">
                         <button onclick="joinGame()" class="flex-1 btn-3d-amber text-slate-950 font-extrabold py-3 px-4 rounded-xl text-xs sm:text-sm transition cursor-pointer">¡Ingresar al Lobby!</button>
-                        <button onclick="restartGame()" class="btn-3d-slate text-slate-350 font-extrabold py-3 px-6 rounded-xl text-xs sm:text-sm transition cursor-pointer">Volver</button>
+                        <button onclick="restartGame()" class="btn-3d-slate text-slate-300 font-bold py-3 px-6 rounded-xl text-xs sm:text-sm transition cursor-pointer">Volver</button>
                     </div>
                 </div>
             </div>
@@ -702,7 +702,7 @@
                     </div>
                 </div>
 
-                <p id="adminCurrentTopicDisplay" class="text-[10px] sm:text-xs text-slate-400 italic bg-slate-900/60 py-2 px-3.5 sm:px-4 rounded-lg">Selecciona un tema para ver o editar sus preguntas cargadas en tu navegador.</p>
+                <p id="adminCurrentTopicDisplay" class="text-[10px] sm:text-xs text-slate-405 italic bg-slate-900/60 py-2 px-3.5 sm:px-4 rounded-lg">Selecciona un tema para ver o editar sus preguntas cargadas en tu navegador.</p>
                 
                 <div class="grid grid-cols-3 gap-2 sm:gap-3">
                     <button onclick="loadQuestionsForAdmin('work_energy')" class="btn-3d-slate text-white font-bold py-2 sm:py-2.5 px-2.5 rounded-lg text-[10px] sm:text-xs transition cursor-pointer">Trabajo y Energía</button>
@@ -726,7 +726,7 @@
                             <input type="file" id="csvFileInputAdmin" accept=".csv" class="hidden" onchange="handleCSVUpload(event, 'admin')">
                         </label>
                         <button onclick="downloadCSVTemplate()" class="btn-3d-slate text-indigo-350 text-[11px] sm:text-xs font-bold py-2 px-3.5 rounded-xl flex items-center justify-center gap-1.5 w-full sm:w-auto cursor-pointer">
-                            <i data-lucide="download" class="w-3.5 h-3.5 text-indigo-400"></i>
+                            <i data-lucide="download" class="w-3.5 h-3.5 text-indigo-450"></i>
                             <span>Descargar Plantilla CSV</span>
                         </button>
                     </div>
@@ -1118,7 +1118,7 @@
             { question: "¿Qué ley de Newton afirma que un objeto en reposo tiende a permanecer en reposo?", options: ["Primera Ley de Newton (Inercia)", "Segunda Ley de Newton (F=ma)", "Tercera Ley de Newton (Acción-Reacción)", "La Ley de Gravitación"], correctAnswerIndex: 0, explanation: "Esta es la definición de la Primera Ley de Newton, también conocida como Ley de la Inercia." },
             { question: "La Segunda Ley de Newton se expresa matemáticamente como:", options: ["$\\vec{F} = m \\cdot \\vec{a}$", "$\\vec{F}_{12} = -\\vec{F}_{21}$", "$\\sum \\vec{F} = 0$", "$E_k = \\frac{1}{2} m v^2$"], correctAnswerIndex: 0, explanation: "La Segunda Ley de Newton establece que la fuerza neta ($\vec{F}$) que actúa sobre un objeto es igual al producto de su masa ($m$) y su aceleración ($\vec{a}$)." },
             { question: "Si empujas una pared con una fuerza de 10 N, ¿cuál es la fuerza que la pared ejerce sobre ti?", options: ["10 N en la misma dirección.", "10 N en dirección opuesta.", "Menos de 10 N.", "Cero, porque la pared no se mueve."], correctAnswerIndex: 1, explanation: "Según la Tercera Ley de Newton (Acción-Reacción), por cada acción hay una reacción igual y opuesta. La pared te empuja con 10 N en dirección opuesta." },
-            { question: "¿Qué magnitud mide la inercia de un objeto?", options: ["Peso", "Velocidad", "Aceleración", "Masa"], correctAnswerIndex: 3, explanation: "La masa de un objeto es una medida de su inercia, es decir, su resistencia a cambiar su estado de movimiento." },
+            { question: "La inercia de un objeto se mide mediante:", options: ["Peso", "Velocidad", "Aceleración", "Masa"], correctAnswerIndex: 3, explanation: "La masa de un objeto es una medida de su inercia, es decir, su resistencia a cambiar su estado de movimiento." },
             { question: "Un objeto está en equilibrio si:", options: ["Está en reposo únicamente.", "Se mueve con velocidad constante y aceleración no nula.", "La suma de todas las fuerzas que actúan sobre él es cero.", "Solo actúan fuerzas de fricción."], correctAnswerIndex: 2, explanation: "Un objeto está en equilibrio si la fuerza neta que actúa sobre él es cero, lo que implica que está en reposo o se mueve con velocidad constante (Primera Ley de Newton)." },
             { question: "Un astronauta flota en el espacio lejos de cualquier planeta. Si lanza una herramienta, ¿qué le ocurre al astronauta?", options: ["Se mantiene en su lugar.", "Se mueve en la misma dirección que la herramienta.", "Se mueve en dirección opuesta a la herramienta.", "Acelera indefinidamente."], correctAnswerIndex: 2, explanation: "Según la Tercera Ley de Newton, al lanzar la herramienta, el astronauta ejerce una fuerza sobre ella, y la herramienta ejerce una fuerza igual y opuesta sobre el astronauta, causando que este se mueva en dirección contraria." }
         ];
