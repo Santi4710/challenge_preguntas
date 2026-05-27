@@ -213,12 +213,29 @@
         }
         .animate-ambient-light-1 { animation: float-light-1 22s infinite ease-in-out; }
 
+        /* --- CONFIGURACIÓN DE RENDIMIENTO ULTRA LIMPIO PARA MATHJAX (SIN BARRAS NI FLECHAS DE SCROLL EN INLINE) --- */
         mjx-container {
             max-width: 100% !important;
-            overflow-x: auto !important;
+            overflow: visible !important; /* Desactiva scrollbar por defecto del sistema */
             display: inline-block !important;
             vertical-align: middle;
+            scrollbar-width: none !important; /* Oculta barra en Firefox */
+            -ms-overflow-style: none !important;  /* Oculta barra en IE/Edge */
         }
+        mjx-container::-webkit-scrollbar {
+            display: none !important; /* Oculta barra en Chrome/Safari/Brave */
+            width: 0 !important;
+            height: 0 !important;
+        }
+        
+        /* Solo habilitado para formulas de bloque que necesiten scroll en casos extremos */
+        mjx-container[display="true"] {
+            display: block !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            padding: 4px 0;
+        }
+
         @keyframes pulse-correct {
             from { box-shadow: 0 0 8px rgba(34, 197, 94, 0.4); }
             to { box-shadow: 0 0 20px rgba(34, 197, 94, 0.8); }
@@ -249,12 +266,11 @@
         /* Adaptación de layouts móviles para ocupar todo el viewport vertical disponible de forma fluida */
         @media (max-width: 640px) {
             .mobile-full-height {
-                min-height: calc(100vh - 40px) !important;
+                min-height: calc(100vh - 120px) !important; /* Ajuste preciso para no dejar márgenes negros arriba/abajo */
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                padding-left: 1rem !important;
-                padding-right: 1rem !important;
+                padding: 1.25rem !important;
             }
             .mobile-grow-section {
                 flex-grow: 1;
@@ -302,11 +318,11 @@
 
     <!-- CUERPO DEL JUEGO -->
     <main class="max-w-4xl w-full mx-auto flex-grow flex flex-col justify-stretch sm:justify-center my-1 sm:my-3 z-10 relative">
-        <!-- Tarjeta principal optimizada para rellenar toda la pantalla móvil verticalmente -->
-        <div class="bg-slate-950/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 relative overflow-hidden card-glow-border min-h-[82vh] sm:min-h-0 flex flex-col justify-between mobile-full-height">
+        <!-- Tarjeta principal optimizada para rellenar toda la pantalla móvil verticalmente (flex-grow activo) -->
+        <div class="bg-slate-950/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 relative overflow-hidden card-glow-border min-h-[82vh] sm:min-h-0 flex flex-col justify-between mobile-full-height flex-grow sm:flex-grow-0">
             
             <!-- PANTALLA: BIENVENIDA -->
-            <div id="welcomeScreen" class="game-screen active space-y-3 sm:space-y-6 relative z-20">
+            <div id="welcomeScreen" class="game-screen active space-y-3 sm:space-y-6 relative z-20 flex-grow">
                 <div class="text-center space-y-0.5 sm:space-y-1">
                     <h2 class="text-xl sm:text-3xl font-extrabold text-white">¡Bienvenido al Desafío!</h2>
                     <p class="text-slate-400 text-[11px] sm:text-sm">Compite en tiempo real o practica en solitario.</p>
@@ -324,7 +340,7 @@
                                 <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Introduce el PIN de acceso para competir.</p>
                             </div>
                         </div>
-                        <button onclick="showJoinScreen()" class="w-full btn-3d-amber text-slate-950 font-extrabold py-2 sm:py-3 px-4 rounded-xl cursor-pointer text-xs sm:text-sm">Ingresar PIN</button>
+                        <button onclick="showJoinScreen()" class="w-full btn-3d-amber text-slate-950 font-extrabold py-2.5 sm:py-3 px-4 rounded-xl cursor-pointer text-xs sm:text-sm">Ingresar PIN</button>
                     </div>
                     <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-3.5 sm:p-6 flex flex-col justify-between space-y-2 sm:space-y-4">
                         <div class="flex items-center sm:items-start gap-3 sm:flex-col sm:gap-0">
@@ -336,7 +352,7 @@
                                 <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">Crea, edita o importa tus sets de preguntas.</p>
                             </div>
                         </div>
-                        <button onclick="showCustomGameSetup()" class="w-full btn-3d-cyan text-white font-extrabold py-2 sm:py-3 px-4 rounded-xl cursor-pointer text-xs sm:text-sm">Gestionar Configuración</button>
+                        <button onclick="showCustomGameSetup()" class="w-full btn-3d-cyan text-white font-extrabold py-2.5 sm:py-3 px-4 rounded-xl cursor-pointer text-xs sm:text-sm">Gestionar Configuración</button>
                     </div>
                 </div>
 
@@ -381,9 +397,9 @@
             </div>
 
             <!-- CONFIGURAR PARTIDA (HOST) -->
-            <div id="hostSetupScreen" class="game-screen hidden space-y-4 sm:space-y-6 z-20">
+            <div id="hostSetupScreen" class="game-screen hidden space-y-4 sm:space-y-6 z-20 flex-grow">
                 <h2 class="text-xl sm:text-2xl font-extrabold text-white text-center">Configurar Partida</h2>
-                <div class="space-y-4 max-w-md mx-auto text-left flex-grow flex flex-col justify-center w-full">
+                <div class="space-y-4 max-w-md mx-auto text-left flex-grow flex flex-col justify-center w-full mobile-grow-section">
                     <div class="space-y-1">
                         <label for="hostNameInput" class="text-xs font-semibold text-slate-400">Nombre de Anfitrión:</label>
                         <input type="text" id="hostNameInput" placeholder="Ej: Prof. Geller" class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-2.5 sm:py-3 px-4 outline-none focus:border-indigo-500 text-sm">
@@ -401,7 +417,7 @@
             </div>
 
             <!-- PARTIDAS PERSONALIZADAS -->
-            <div id="customGameSetupScreen" class="game-screen hidden space-y-4 relative z-20">
+            <div id="customGameSetupScreen" class="game-screen hidden space-y-4 relative z-20 flex-grow">
                 <div class="flex items-center gap-3 border-b border-slate-900 pb-2 text-left">
                     <button onclick="restartGame()" class="text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
                     <h2 class="text-lg sm:text-2xl font-extrabold text-white">Partidas Personalizadas</h2>
@@ -496,7 +512,7 @@
             </div>
 
             <!-- UNIRSE A PARTIDA (PIN) -->
-            <div id="joinScreen" class="game-screen hidden space-y-4 relative z-20">
+            <div id="joinScreen" class="game-screen hidden space-y-4 relative z-20 flex-grow">
                 <div class="flex items-center gap-3 border-b border-slate-900 pb-2 text-left">
                     <button onclick="restartGame()" class="text-slate-400 hover:text-white transition"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
                     <h2 class="text-lg sm:text-2xl font-extrabold text-white">Unirse a una Partida</h2>
@@ -519,7 +535,7 @@
             </div>
 
             <!-- LOBBY DE ESPERA (HOST) -->
-            <div id="lobbyScreen" class="game-screen hidden space-y-4 relative z-20 text-center">
+            <div id="lobbyScreen" class="game-screen hidden space-y-4 relative z-20 text-center flex-grow">
                 <div class="space-y-1">
                     <div class="bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full text-[9px] font-bold w-fit mx-auto border border-indigo-500/20">LOBBY DE ESPERA</div>
                     <h2 class="text-xl sm:text-2xl font-black text-white">¡Partida Creada!</h2>
@@ -529,7 +545,7 @@
                         <span class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">PIN de Acceso</span>
                         <div id="lobbyPin" class="text-3xl sm:text-4xl font-black text-indigo-400 tracking-wider bg-slate-950/80 p-3 rounded-xl border border-slate-900 text-center">------</div>
                     </div>
-                    <!-- Bloque del Código QR limpio, restaurado e idéntico al sistema anterior -->
+                    <!-- Bloque del Código QR limpio, restaurado e idéntico al sistema anterior sin estirar -->
                     <div class="flex flex-col items-center justify-center space-y-2 bg-slate-950/60 p-4 rounded-2xl border border-slate-900 max-w-[200px] w-full mx-auto">
                         <span class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">Código QR Rápido</span>
                         <div class="bg-white p-2 rounded-xl shadow-lg border border-slate-800" id="qrCodeContainer"></div>
@@ -563,7 +579,7 @@
             </div>
 
             <!-- ADMINISTRAR PREGUNTAS BASE -->
-            <div id="adminScreen" class="game-screen hidden space-y-3 relative z-20">
+            <div id="adminScreen" class="game-screen hidden space-y-3 relative z-20 flex-grow">
                 <div class="flex items-center border-b border-slate-900 pb-2 text-left">
                     <button onclick="restartGame()" class="text-slate-400 hover:text-white transition mr-3"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
                     <h2 class="text-base sm:text-lg font-extrabold text-white">Administrador de Preguntas Predefinidas</h2>
@@ -640,15 +656,17 @@
                     </div>
                 </div>
 
-                <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-3 sm:p-6 text-center shadow-lg relative flex-grow flex items-center justify-center min-h-[80px] max-h-[180px]">
-                    <div id="questionText" class="text-xs sm:text-lg font-bold text-white math-container tracking-wide leading-relaxed">Cargando pregunta...</div>
+                <!-- Caja de Preguntas fluida sin restricción rígida de altura en móvil -->
+                <div class="bg-slate-900/50 border border-slate-800 rounded-xl p-3 sm:p-6 text-center shadow-lg relative flex-grow flex items-center justify-center min-h-[90px] py-4 sm:py-6">
+                    <div id="questionText" class="text-sm sm:text-lg font-bold text-white math-container tracking-wide leading-relaxed">Cargando pregunta...</div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 flex-grow" id="optionsContainer">
-                    <button class="answer-button min-h-[44px] text-xs sm:text-base font-semibold py-2 px-3 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full"></button>
-                    <button class="answer-button min-h-[44px] text-xs sm:text-base font-semibold py-2 px-3 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full"></button>
-                    <button class="answer-button min-h-[44px] text-xs sm:text-base font-semibold py-2 px-3 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full"></button>
-                    <button class="answer-button min-h-[44px] text-xs sm:text-base font-semibold py-2 px-3 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full"></button>
+                <!-- Contenedor de opciones con más espacio de click en celulares -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1.5 flex-grow" id="optionsContainer">
+                    <button class="answer-button min-h-[48px] text-xs sm:text-base font-semibold py-2.5 px-3 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[48px] text-xs sm:text-base font-semibold py-2.5 px-3 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[48px] text-xs sm:text-base font-semibold py-2.5 px-3 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
+                    <button class="answer-button min-h-[48px] text-xs sm:text-base font-semibold py-2.5 px-3 rounded-xl text-slate-100 flex items-center justify-center cursor-pointer text-center math-container w-full btn-3d-option"></button>
                 </div>
 
                 <div id="feedback" class="text-center font-black text-xs sm:text-sm transition-all duration-300 min-h-[18px]"></div>
@@ -696,7 +714,7 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="max-w-5xl w-full mx-auto text-center py-2.5 border-t border-slate-900/60 z-10 relative">
+    <footer class="max-w-5xl w-full mx-auto text-center py-2.5 border-t border-slate-900/60 z-10 relative shrink-0">
         <p class="text-[9px] text-slate-500 tracking-wider">Desarrollado con fines educativos • Física Challenge v2.4</p>
     </footer>
 
@@ -1225,6 +1243,7 @@
             savedCustomGameSets = storedSets ? JSON.parse(storedSets) : [];
         }
 
+        // Guardado persistente
         function saveCustomGameSetsToStorage() {
             localStorage.setItem(CUSTOM_SETS_STORAGE_KEY, JSON.stringify(savedCustomGameSets));
         }
@@ -1246,7 +1265,7 @@
                     </div>
                     <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
                         <button class="bg-emerald-600 hover:bg-emerald-500 border border-emerald-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition cursor-pointer" onclick="useSavedCustomSet(${index})">Usar</button>
-                        <button class="bg-indigo-600 hover:bg-indigo-500 border border-indigo-500 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition cursor-pointer" onclick="editSavedCustomSet(${index})">Editar</button>
+                        <button class="bg-indigo-600 hover:bg-indigo-500 border border-indigo-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition cursor-pointer" onclick="editSavedCustomSet(${index})">Editar</button>
                         <button class="bg-rose-600 hover:bg-rose-500 border border-rose-550 text-white text-[11px] font-bold py-1.5 px-3.5 rounded-lg transition cursor-pointer" onclick="deleteSavedCustomSet(${index})">Eliminar</button>
                     </div>
                 `;
@@ -1532,10 +1551,10 @@
             if (isCorrect) {
                 const bonus = Math.round(MAX_BONUS * (timeLeft / TIME_PER_QUESTION));
                 score += BASE_SCORE + bonus;
-                feedback.innerHTML = `<span class="text-emerald-450 font-bold">¡Correcto! +${BASE_SCORE + bonus} pts</span>`;
+                feedback.innerHTML = `<span class="text-emerald-455 font-bold">¡Correcto! +${BASE_SCORE + bonus} pts</span>`;
                 sound.playCorrect();
             } else { 
-                feedback.innerHTML = selectedIndex !== null ? '<span class="text-rose-450 font-bold">¡Incorrecto!</span>' : '<span class="text-rose-455 font-bold">¡Tiempo agotado!</span>'; 
+                feedback.innerHTML = selectedIndex !== null ? '<span class="text-rose-405 font-bold">¡Incorrecto!</span>' : '<span class="text-rose-455 font-bold">¡Tiempo agotado!</span>'; 
                 sound.playIncorrect();
             }
             document.getElementById('currentScoreDisplay').textContent = `Puntuación: ${score}`;
@@ -1645,7 +1664,7 @@
                             const p = doc.data(); 
                             const li = document.createElement('li'); 
                             
-                            let badgeStyle = "bg-slate-900 border-slate-850 text-slate-300";
+                            let badgeStyle = "bg-slate-900 border-slate-855 text-slate-300";
                             let icon = `<span class="font-bold text-xs">${index}°</span>`;
                             if (index === 1) {
                                 badgeStyle = "bg-amber-500/10 text-amber-400 border-amber-500/30";
